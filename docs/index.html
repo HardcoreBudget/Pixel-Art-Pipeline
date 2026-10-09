@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel-Art-Pipeline</title>
+<meta name="description" content="Pixel-art designs from a text prompt with Krea 2 in ComfyUI, and the route into Pixel Art Studio for Unity, with three showcases built through it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=Silkscreen:wght@400;700&display=swap">
+<style>
+:root {
+  --bg: #0d0c12; --surface: #16151d; --raise: #1d1c26; --ink: #f2efe6; --muted: #a9a5b6; --line: #2d2b39;
+  --accent: #ffd84a; --accent-text: #ffd84a; --on-accent: #0d0c12; --code-bg: #1d1c26;
+  --display: "Silkscreen", "Courier New", ui-monospace, monospace;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f5f2e9; --surface: #fbfaf5; --raise: #ffffff; --ink: #15131a; --muted: #5a5767; --line: #dcd6c4;
+    --accent: #ffd84a; --accent-text: #8a5a00; --on-accent: #15131a; --code-bg: #efeadb; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f5f2e9; --surface: #fbfaf5; --raise: #ffffff; --ink: #15131a; --muted: #5a5767; --line: #dcd6c4;
+  --accent: #ffd84a; --accent-text: #8a5a00; --on-accent: #15131a; --code-bg: #efeadb; color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--body); }
+main { max-width: 1040px; margin: 0 auto; padding: 40px 16px 72px; display: flex; flex-direction: column; gap: 72px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; margin: 0; line-height: 1.1; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 7vw, 3.6rem); letter-spacing: 0.01em; }
+h1 span { color: var(--accent-text); }
+h2 { font-size: clamp(1.3rem, 4vw, 1.75rem); }
+h3 { font-size: 1.05rem; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent-text); }
+a:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.muted { color: var(--muted); }
+.eyebrow { font: 700 0.72rem/1.4 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.px { image-rendering: crisp-edges; image-rendering: pixelated; }
+img { max-width: 100%; height: auto; display: block; }
+code { font: 0.86em/1.4 var(--mono); background: var(--code-bg); border: 1px solid var(--line); padding: 0 4px; border-radius: 3px; overflow-wrap: anywhere; }
+pre { margin: 0; background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px; padding: 12px 14px; overflow-x: auto; font: 0.84rem/1.55 var(--mono); }
+pre code { background: none; border: 0; padding: 0; overflow-wrap: normal; }
+
+.hero { display: grid; gap: 22px; }
+.lede { font-size: 1.15rem; max-width: 62ch; }
+.hero-art { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.hero-art figure { margin: 0; display: grid; gap: 6px; }
+.hero-art img { width: 100%; background: #000; border: 1px solid var(--line); }
+.hero-art figcaption { font: 0.74rem/1.3 var(--mono); color: var(--muted); }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 4px; text-decoration: none; font-weight: 700; border: 2px solid var(--accent); }
+.btn.primary { background: var(--accent); color: var(--on-accent); }
+.btn.ghost { color: var(--accent-text); }
+.btn:hover { filter: brightness(1.08); }
+
+.install { display: grid; gap: 12px; }
+.tabs-os { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 12px; }
+.os { display: grid; gap: 6px; }
+.os .label { font: 500 0.78rem/1.3 var(--mono); color: var(--muted); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; counter-reset: s; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: grid; gap: 10px; align-content: start; counter-increment: s; }
+.steps li::before { content: counter(s); font: 700 0.8rem/1 var(--display); color: var(--on-accent); background: var(--accent); width: 26px; height: 26px; display: grid; place-items: center; border-radius: 3px; }
+.steps .art { background: #fff; border-radius: 3px; display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; }
+.steps .art.dark { background: #1b1a24; }
+.steps .art img { width: 100%; height: 100%; object-fit: contain; }
+.steps p { font-size: 0.93rem; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; display: grid; grid-template-rows: auto 1fr; text-decoration: none; color: inherit; }
+.card:hover { border-color: var(--accent); }
+.card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: #000; }
+.card .body { padding: 14px 16px 18px; display: grid; gap: 8px; align-content: start; }
+.card .facts { font: 0.76rem/1.4 var(--mono); color: var(--muted); }
+.card .go { font-weight: 700; color: var(--accent-text); }
+
+.plugin { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 6px; padding: 20px; display: grid; gap: 12px; }
+footer { border-top: 1px solid var(--line); padding-top: 18px; font-size: 0.88rem; color: var(--muted); display: grid; gap: 8px; }
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .hero-art { grid-template-columns: 1fr 1fr; }
+  .hero-art figure:first-child { grid-column: 1 / -1; }
+}
+</style>
+<link rel="stylesheet" href="assets/site-tabs.css">
+</head>
+<body>
+<a class="site-skip" href="#content">Skip to content</a>
+<nav class="site-tabs" aria-label="Site">
+  <ul>
+    <li><a href="index.html" aria-current="page">Pipeline</a></li>
+    <li><a href="pixel-art-studio/index.html">Pixel Art Studio</a></li>
+    <li><a href="ashen-peak/index.html">Ashen Peak</a></li>
+    <li><a href="drowned-shrine/index.html">Drowned Shrine</a></li>
+  </ul>
+</nav>
+
+<main id="content">
+  <header class="hero">
+    <p class="eyebrow">Krea 2 &middot; ComfyUI &middot; Pixel Art Studio for Unity</p>
+    <h1>Pixel-Art-<span>Pipeline</span></h1>
+    <p class="lede">Pixel-art character and prop designs from a text prompt, made locally with Krea 2 Turbo and a pixel-art
+      LoRA in ComfyUI, then layered, rigged and animated in <strong>Pixel Art Studio</strong>, the Unity plugin. It is the
+      pipeline the Pixel Art Studio trailer cast and the two scenes below were designed with.</p>
+    <div class="hero-art">
+      <figure><img class="px" src="pixel-art-studio/media/poster.png" width="480" height="270" alt="The Pixel Art Studio trailer's title frame"><figcaption>The trailer</figcaption></figure>
+      <figure><img class="px" src="ashen-peak/media/key_302.png" width="256" height="144" alt="Ashen Peak: Riku's flaming uppercut lands the K.O."><figcaption>Ashen Peak</figcaption></figure>
+      <figure><img class="px" src="drowned-shrine/media/key_225.png" width="320" height="180" alt="The Drowned Shrine: Kestrel's Dawn Cleave sunburst"><figcaption>The Drowned Shrine</figcaption></figure>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline">The repository on GitHub</a>
+      <a class="btn ghost" href="#showcases">See the showcases</a>
+    </div>
+  </header>
+
+  <section class="install" aria-labelledby="h-install">
+    <h2 id="h-install">Install in one line</h2>
+    <div class="tabs-os">
+      <div class="os"><span class="label">Linux / macOS (macOS untested)</span>
+        <pre><code>curl -fsSL https://raw.githubusercontent.com/HardcoreBudget/Pixel-Art-Pipeline/main/install.sh | bash</code></pre></div>
+      <div class="os"><span class="label">Windows PowerShell (being tested by the maintainer)</span>
+        <pre><code>irm https://raw.githubusercontent.com/HardcoreBudget/Pixel-Art-Pipeline/main/install.ps1 | iex</code></pre></div>
+    </div>
+    <p class="muted">The installer clones ComfyUI and the ComfyUI-GGUF node at tested commits, makes a Python venv, downloads
+      the six model files (about 13 GB) and checks each SHA-256, and asks before installing the two Claude Code skills.
+      Tested on Linux. Read each model's licence before you download it: the Krea 2
+      Community License allows commercial use only under US$1M annual revenue. Details, requirements and every licence are
+      in the <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline#readme">README</a>.</p>
+    <pre><code>python scripts/krea.py "a young farmer with a straw hat, a plaid shirt and a tin watering can" --name farmer --pixel 64</code></pre>
+  </section>
+
+  <section class="stack" aria-labelledby="h-how">
+    <h2 id="h-how">How it works</h2>
+    <ol class="steps">
+      <li><div class="art"><img class="px" src="pixel-art-studio/media/cast/sir-stacks-design.png" width="256" height="256" loading="lazy" alt="Sir Stacks as Krea 2 drew him"></div>
+        <h3>Design</h3><p><code>scripts/krea.py</code> asks Krea 2 Turbo with the 64-grid pixel LoRA for one design: one art pixel per 16 px block. About 7 minutes on a 4 GB GPU.</p></li>
+      <li><div class="art dark"><img class="px" src="pixel-art-studio/media/cast/sir-stacks-grid6.png" loading="lazy" alt="Sir Stacks on the 64 grid"></div>
+        <h3>Snap to the grid</h3><p>The background is removed and the picture is snapped to its grid, then imported into the plugin with the palette matched in Lab.</p></li>
+      <li><div class="art dark"><img class="px" src="pixel-art-studio/media/cast/sir-stacks-pieces.png" loading="lazy" alt="Sir Stacks peeled into layers"></div>
+        <h3>Peel and rig</h3><p>Pixel Art Studio peels the design into layers, fills what each piece hides and proves the stack still equals the design.</p></li>
+      <li><div class="art dark"><img class="px" src="pixel-art-studio/media/cast/sir-stacks-walk.gif" loading="lazy" alt="Sir Stacks walking"></div>
+        <h3>Animate</h3><p>Pieces turn about their joints, frame by frame, by hand or by an agent through the plugin's verbs. The <code>pixel-scene</code> skill holds the method.</p></li>
+    </ol>
+  </section>
+
+  <section class="stack" id="showcases" aria-labelledby="h-showcases">
+    <h2 id="h-showcases">Showcases</h2>
+    <p class="muted">Every character below started as one Krea 2 design. Everything after it, every frame, tile and effect,
+      was drawn at pixel level and built into real Pixel Art Studio documents.</p>
+    <div class="cards">
+      <a class="card" href="pixel-art-studio/index.html">
+        <img class="px" src="pixel-art-studio/media/scenes/intro-f120.png" loading="lazy" alt="A frame from the trailer's intro">
+        <div class="body"><p class="eyebrow">Trailer breakdown</p><h3>Pixel Art Studio</h3>
+          <p>The plugin's 87-second trailer at 480 &times; 270: seven characters, five stages and a UI kit, all <code>.pas</code> documents built by agents through the plugin's verbs. Plus a behind-the-scenes tour.</p>
+          <span class="facts">87 s &middot; 5,220 frames &middot; videos and 4K masters</span><span class="go">Open the breakdown</span></div>
+      </a>
+      <a class="card" href="ashen-peak/index.html">
+        <img class="px" src="ashen-peak/media/key_124.png" loading="lazy" alt="Ashen Peak: Riku jumps the shockwave">
+        <div class="body"><p class="eyebrow">Fighting scene</p><h3>Ashen Peak</h3>
+          <p>A one-round arcade fight on a temple court at dusk: a quick monk against an armoured giant, a parallax stage, a fighting HUD.</p>
+          <span class="facts">137 frames &middot; 28 moves &middot; 0 pinholes &middot; source included</span><span class="go">Open the fight</span></div>
+      </a>
+      <a class="card" href="drowned-shrine/index.html">
+        <img class="px" src="drowned-shrine/media/key_150.png" loading="lazy" alt="The Drowned Shrine: the Gloomlure charges under three locks">
+        <div class="body"><p class="eyebrow">Turn-based battle</p><h3>The Drowned Shrine</h3>
+          <p>A looping battle in a flooded shrine at night: a swordswoman against a floating anglerfish spirit, with tiles, lighting, effects and UI.</p>
+          <span class="facts">336 ticks &middot; 91 tiles &middot; 4 plugin files &middot; source included</span><span class="go">Open the battle</span></div>
+      </a>
+    </div>
+    <p class="muted">Both scenes rebuild from this repository with no GPU, frame for frame: see
+      <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes">scenes/</a>.</p>
+  </section>
+
+  <section class="plugin" aria-labelledby="h-plugin">
+    <h2 id="h-plugin">Pixel Art Studio for Unity</h2>
+    <p>The layering, rigging and animation happen in Pixel Art Studio, a pixel-art editor inside the Unity Editor: layers,
+      indexed palettes and ramps, animation and tags, tiles, rigs and poses, and a scripting surface that agents drive.
+      Its user manual ships inside the package
+      (<code>Assets/PixelArtStudio/Documentation/PixelArtStudio-Manual.pdf</code>), and chapter 25, "Designs from a
+      prompt", walks through this pipeline.</p>
+    <div class="cta">
+      <!-- Asset Store preview link (package in review); swap for the public listing URL once it is live -->
+      <a class="btn primary" href="https://assetstore.unity.com/preview/415748/1510320">Pixel Art Studio on the Unity Asset Store</a>
+    </div>
+  </section>
+
+  <section class="stack" aria-labelledby="h-watch">
+    <h2 id="h-watch">Watch on YouTube</h2>
+    <p class="muted">The pages play small copies. The full-size videos are on YouTube.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://youtu.be/kO9-EMmBzIY">The trailer, in 4K</a>
+      <a class="btn ghost" href="https://youtu.be/6D3o98zsSJg">Behind the scenes</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>The code (scripts, installers, skills, scene source and these pages' HTML) is MIT
+      (<a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/blob/main/LICENSE">LICENSE</a>); the images, GIFs and the trailer and
+      behind-the-scenes videos on these pages are CC BY 4.0
+      (<a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/blob/main/LICENSE-MEDIA">LICENSE-MEDIA</a>); the YouTube uploads are the same videos. The models and ComfyUI are
+      not included and keep their own licences: see
+      <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/blob/main/THIRD_PARTY_NOTICES.md">THIRD_PARTY_NOTICES.md</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

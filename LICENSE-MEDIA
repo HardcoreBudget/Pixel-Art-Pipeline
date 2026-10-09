@@ -1,0 +1,27 @@
+Media licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Hazim Emad Ismail (HardcoreBudget)
+
+The media in this repository are licensed under CC BY 4.0:
+https://creativecommons.org/licenses/by/4.0/ (legal code:
+https://creativecommons.org/licenses/by/4.0/legalcode).
+
+"Media" means every image, GIF, video and document that is not code:
+  - the pictures, GIFs and videos of the showcase site in docs/;
+  - the example designs in examples/;
+  - the designs, art and .pas files in scenes/;
+  - the Pixel Art Studio trailer and behind-the-scenes videos in docs/ (the copies on
+    YouTube are the same videos; the YouTube licence setting is chosen separately by the
+    uploader).
+
+You may share and adapt them for any purpose, including commercially, as long as you
+give appropriate credit, for example:
+  "Pixel Art Studio media by HardcoreBudget (CC BY 4.0),
+   https://github.com/HardcoreBudget/Pixel-Art-Pipeline"
+and indicate if changes were made.
+
+The code (scripts, installers, workflow files, skills, scene source code and unity/) is
+under the MIT licence in LICENSE. Third-party software and models keep their own
+licences: see THIRD_PARTY_NOTICES.md. The behind-the-scenes videos show the Unity Editor;
+Unity's name, logo and Editor interface belong to Unity Technologies and are not covered
+by this licence.

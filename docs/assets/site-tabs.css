@@ -1,0 +1,36 @@
+/* The shared site tab bar. Neutral on purpose: the same dark strip on every page and in both colour schemes, so it
+   sits above each showcase's own theme without restyling it. Everything is scoped to .site-tabs. */
+.site-skip {
+  position: absolute; left: 8px; top: -64px; z-index: 100;
+  padding: 10px 14px; background: #f2f0ea; color: #111114; border-radius: 4px;
+  font: 600 14px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif; text-decoration: none;
+}
+.site-skip:focus { top: 8px; outline: 2px solid #ffd84a; outline-offset: 2px; }
+.site-tabs {
+  background: #111114; border-bottom: 1px solid #2c2b33; color: #e9e6df;
+  font: 500 14px/1.2 system-ui, -apple-system, "Segoe UI", sans-serif;
+  margin: 0; padding: 0;
+}
+/* the trailer page pads <body> sideways; reach the edges anyway */
+body.site-body-padded .site-tabs { margin-inline: -16px; }
+.site-tabs ul {
+  list-style: none; margin: 0 auto; padding: 0 8px; max-width: 1080px;
+  display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.site-tabs ul::-webkit-scrollbar { display: none; }
+.site-tabs li { flex: none; margin: 0; padding: 0; }
+.site-tabs a {
+  display: flex; align-items: center; min-height: 44px; padding: 0 12px;
+  color: #b9b6c2; text-decoration: none; white-space: nowrap;
+  border-bottom: 3px solid transparent; border-top: 3px solid transparent;
+}
+.site-tabs a:hover { color: #ffffff; border-bottom-color: #5b5868; }
+.site-tabs a[aria-current="page"] { color: #ffffff; font-weight: 700; border-bottom-color: #ffd84a; }
+.site-tabs a:focus-visible { outline: 2px solid #ffd84a; outline-offset: -4px; border-radius: 2px; }
+.site-tabs .site-brand { color: #ffd84a; font-weight: 700; letter-spacing: 0.02em; }
+@media (prefers-reduced-motion: reduce) { .site-tabs * { transition: none !important; } }
+/* narrow screens: wrap instead of hiding the last tab behind a sideways scroll */
+@media (max-width: 520px) {
+  .site-tabs ul { flex-wrap: wrap; overflow-x: visible; padding: 2px 4px; }
+  .site-tabs a { min-height: 40px; padding: 0 9px; font-size: 13.5px; }
+}

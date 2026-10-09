@@ -1,0 +1,10 @@
+{
+    "name": "PipelineSandbox.Editor",
+    "rootNamespace": "PipelineSandbox",
+    "references": ["PixelArtStudio.Runtime", "PixelArtStudio.Editor"],
+    "includePlatforms": ["Editor"],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "autoReferenced": false,
+    "noEngineReferences": false
+}

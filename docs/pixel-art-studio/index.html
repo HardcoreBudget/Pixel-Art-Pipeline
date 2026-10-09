@@ -1,0 +1,1193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pixel Art Studio Trailer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=Silkscreen:wght@400;700&display=swap">
+<style>
+/* Layout: one 960 px column built on the trailer's 480 x 270 screen; media snaps to x1 / x2 of it, section heads are the trailer's own level cards (UI/Kit.pas). */
+:root {
+  /* colour: dark first, from UI/Kit.pas (card black, box paper, star gold) */
+  --bg: #0b0b10;
+  --surface: #15141c;
+  --ink: #f4f1e8;
+  --muted: #a7a3b4;
+  --line: #2c2a38;
+  --grid: rgba(244, 241, 232, 0.035);
+  --accent: #ffd84a;
+  --accent-text: #ffd84a;
+  --on-accent: #0b0b10;
+  --ok: #7fd18b;
+  --mark: #ffd84a;
+  --ok-ink: #0b0b10;
+  /* fixed kit colours: the same in both themes, as in the trailer */
+  --card: #0b0b10;
+  --card-line: #e8e4d8;
+  --card-ink: #f4f1e8;
+  --paper: #f4f1e8;
+  --paper-line: #d9d3bf;
+  --paper-edge: #1b1b2f;
+  --paper-ink: #141218;
+  --cap: #202020;
+  /* type */
+  --display: "Silkscreen", "Courier New", ui-monospace, monospace;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --col: 960px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f4f1e8; --surface: #fbfaf5; --ink: #141218; --muted: #5b5868; --line: #d9d3bf;
+    --grid: rgba(43, 86, 156, 0.07); --accent: #ffd84a; --accent-text: #8a5a00; --on-accent: #0b0b10;
+    --ok: #1f7a34; --ok-ink: #ffffff; --mark: #a87700; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f4f1e8; --surface: #fbfaf5; --ink: #141218; --muted: #5b5868; --line: #d9d3bf;
+  --grid: rgba(43, 86, 156, 0.07); --accent: #ffd84a; --accent-text: #8a5a00; --on-accent: #0b0b10;
+  --ok: #1f7a34; --ok-ink: #ffffff; --mark: #a87700; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  color: var(--ink);
+  font: 17px/1.6 var(--body);
+  padding-inline: 16px;
+  padding-block: 0 64px;
+  overflow-x: hidden;
+}
+.wrap { max-width: var(--col); margin: 0 auto; display: flex; flex-direction: column; gap: 88px; }
+img, video, svg { max-width: 100%; height: auto; }
+.px { image-rendering: crisp-edges; image-rendering: pixelated; }
+a { color: var(--accent-text); }
+code { font: 0.86em/1.4 var(--mono); background: var(--surface); border: 1px solid var(--line); padding: 0 4px; overflow-wrap: anywhere; }
+.mono { font-family: var(--mono); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.eyebrow { font: 700 0.72rem/1.4 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); margin: 0 0 6px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+p { margin: 0; max-width: 68ch; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.scroll { overflow-x: auto; max-width: 100%; }
+figure { margin: 0; }
+figcaption { font-size: 0.9rem; color: var(--muted); margin-top: 8px; }
+
+/* masthead */
+.mast { padding-top: 56px; display: grid; gap: 18px; }
+.mast h1 { font: 700 clamp(2.1rem, 7vw, 4.4rem)/1.02 var(--display); letter-spacing: 0.01em; }
+.mast h1 span { color: var(--accent-text); display: block; }
+.lede { font-size: 1.15rem; max-width: 60ch; }
+
+/* sticky level select */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; margin: 28px -16px 0; padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--line); }
+.nav ol { list-style: none; margin: 0 auto; padding: 0; max-width: var(--col); display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.nav a { display: block; white-space: nowrap; font: 700 0.72rem/1 var(--display); letter-spacing: 0.06em; text-decoration: none; color: var(--card-ink); background: var(--card); border: 2px solid var(--card-line); padding: 7px 9px; }
+.nav a:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+
+/* level cards (UI/Kit.pas Card: black, 2 px paper border) */
+.levelcard { display: inline-block; background: var(--card); color: var(--card-ink); border: 3px solid var(--card-line); font: 700 clamp(1.25rem, 3.6vw, 1.9rem)/1.1 var(--display); letter-spacing: 0.04em; text-transform: uppercase; padding: 14px 22px; }
+.levelcard-sm { font-size: 1.05rem; padding: 8px 14px; border-width: 2px; }
+section { display: flex; flex-direction: column; gap: 28px; scroll-margin-top: 64px; }
+.sec-head { display: grid; gap: 14px; }
+
+/* the screen */
+.screen, .compare, .credits-img { box-sizing: content-box; width: 960px; max-width: 100%; margin-inline: -3px; }
+.screen { background: #000; border: 3px solid var(--card-line); line-height: 0; }
+.screen video, .screen img { display: block; width: 100%; height: auto; }
+.screen-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; color: var(--muted); }
+
+/* timeline */
+.timeline { position: relative; height: 44px; background: var(--card); border: 2px solid var(--card-line); }
+.timeline .span { position: absolute; top: 0; bottom: 0; left: var(--l); width: var(--w); background: var(--c); color: var(--ci); border: 0; border-right: 2px solid var(--card); padding: 0; cursor: pointer; overflow: hidden; font: 700 0.72rem/1 var(--display); }
+.timeline .span:hover, .timeline .span[aria-current="true"] { box-shadow: inset 0 -6px 0 var(--accent); }
+.timeline .head { position: absolute; top: -6px; bottom: -6px; width: 2px; background: var(--accent); left: 0; pointer-events: none; }
+.ticks { display: flex; justify-content: space-between; margin-top: 6px; color: var(--muted); }
+.caption-line { font-size: 1.05rem; }
+
+table.tbl { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+.tbl th, .tbl td { text-align: left; vertical-align: top; padding: 7px 10px; border-bottom: 1px solid var(--line); }
+.tbl th { font: 700 0.68rem/1.3 var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); position: sticky; top: 0; }
+.tbl td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* scenes */
+.scene { display: flex; flex-direction: column; gap: 16px; padding-top: 28px; border-top: 4px solid var(--c); }
+.scene-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.scene-span { color: var(--muted); flex: 1 1 260px; }
+.watch { margin: 0; }
+.watch a { display: inline-block; font: 700 0.72rem/1 var(--display); letter-spacing: 0.05em; text-decoration: none; background: var(--accent); color: var(--on-accent); border: 2px solid var(--accent); padding: 11px 14px; }
+.watch a:hover { filter: brightness(1.08); }
+.seek, .chipbtn { font: 700 0.72rem/1 var(--display); letter-spacing: 0.05em; background: var(--accent); color: var(--on-accent); border: 2px solid var(--accent); padding: 9px 12px; cursor: pointer; }
+.seek:hover { background: transparent; color: var(--accent-text); }
+.sells { font-size: 1.05rem; }
+.sells .eyebrow { display: inline; margin-right: 8px; }
+.scene-grid { display: grid; grid-template-columns: 484px minmax(0, 1fr); gap: 24px; align-items: start; }
+.check img { display: block; box-sizing: content-box; border: 2px solid var(--line); max-width: calc(100% - 4px); }
+.ok { display: inline-block; font: 700 0.7rem/1 var(--display); background: var(--ok); color: var(--ok-ink); padding: 4px 6px; margin-right: 4px; vertical-align: 1px; }
+.facts { margin: 0; display: grid; gap: 12px; }
+.facts dt { font: 700 0.68rem/1.3 var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 0.78rem/1 var(--mono); border: 1px solid var(--line); background: var(--surface); padding: 5px 7px; }
+.chip b { color: var(--accent-text); font-weight: 500; }
+.calls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.call { font: 700 0.72rem/1 var(--display); padding: 6px 8px; background: var(--card); color: var(--card-ink); border: 2px solid var(--card-line); }
+.call-callout { color: #ffd84a; }
+.call-label { background: var(--paper); color: var(--paper-ink); border-color: var(--paper-edge); }
+
+/* kit dialogue boxes (UI/Kit.pas Box + Tag plates) */
+.kitboxes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 26px 14px; padding-top: 12px; }
+.kitbox { position: relative; background: var(--paper); color: var(--paper-ink); border: 2px solid var(--paper-edge); box-shadow: inset 0 0 0 2px var(--paper), inset 0 0 0 3px var(--paper-line); padding: 16px 14px 12px; display: flex; justify-content: space-between; gap: 12px; font: 700 0.86rem/1.4 var(--display); }
+.kitbox .kat { font: 0.72rem/1.6 var(--mono); color: #5b5868; white-space: nowrap; }
+.plate { display: inline-block; font: 700 0.7rem/1 var(--display); letter-spacing: 0.04em; background: var(--p, #4a4a55); color: var(--pi, #f4f1e8); border: 2px solid var(--paper-edge); padding: 4px 6px; }
+.kitbox .plate { position: absolute; top: -14px; left: 10px; }
+.plate-none { background: #3a3a4a; }
+.plate-lg { font-size: clamp(1.1rem, 3vw, 1.5rem); padding: 8px 12px; border-width: 3px; }
+
+details { border: 1px solid var(--line); background: var(--surface); }
+details > summary { cursor: pointer; padding: 10px 14px; font: 700 0.74rem/1.4 var(--display); letter-spacing: 0.05em; }
+details > summary .muted { font: 0.8rem var(--body); letter-spacing: 0; }
+details[open] > summary { border-bottom: 1px solid var(--line); }
+details > .scroll, details > figure { padding: 12px; }
+.beats-tbl { min-width: 560px; }
+
+/* cast */
+.char { display: flex; flex-direction: column; gap: 20px; padding-top: 28px; border-top: 1px solid var(--line); }
+.char-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.char-note { font-size: 1.02rem; }
+.build { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; counter-reset: step; }
+.build li { display: flex; }
+.build img { display: block; background: var(--cap); }
+.build figcaption b { display: block; color: var(--ink); font: 700 0.72rem/1.4 var(--display); letter-spacing: 0.05em; text-transform: uppercase; }
+.build li { counter-increment: step; }
+.build figcaption b::before { content: counter(step) " > "; color: var(--accent-text); }
+.char-grid { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 24px; align-items: start; }
+.pieces img { display: block; background: var(--cap); }
+.tree { font: 0.8rem/1.5 var(--mono); }
+.tree ul { list-style: none; margin: 0; padding-left: 14px; border-left: 1px dashed var(--line); }
+.tree > ul { padding-left: 0; border-left: 0; }
+.tree li.grp { color: var(--accent-text); }
+.tree li.grp::before { content: "[+] "; }
+.tree li.lyr { color: var(--ink); }
+.tree li.lyr::before { content: "- "; color: var(--muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 16px; }
+.tag { width: 256px; max-width: 100%; }
+.tag img { display: block; background: var(--cap); }
+.tag figcaption b { color: var(--ink); font: 700 0.78rem var(--display); margin-right: 6px; }
+.strip { padding: 12px; }
+.strip figcaption { margin: 0 0 6px; font: 700 0.72rem var(--display); }
+.strip img { display: block; max-width: none; }
+.numbers { margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.numbers div { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+.numbers dt { font: 700 0.66rem/1.3 var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.numbers dd { margin: 3px 0 0; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.wide img { display: block; max-width: none; background: var(--cap); }
+
+/* world */
+.stage { display: flex; flex-direction: column; gap: 16px; padding-top: 28px; border-top: 1px solid var(--line); }
+.stage-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.stage-head h3 { font: 700 1.5rem/1.1 var(--display); }
+.compare { position: relative; line-height: 0; border: 3px solid var(--card-line); background: #000; }
+.compare img { display: block; width: 100%; height: auto; }
+.compare .before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.compare::after { content: ""; position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: var(--accent); pointer-events: none; }
+.compare .cmp { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.compare:focus-within { outline: 3px solid var(--accent); outline-offset: 2px; }
+.tagv { position: absolute; top: 8px; font: 700 0.7rem/1 var(--display); padding: 5px 7px; background: var(--card); color: var(--card-ink); border: 2px solid var(--card-line); }
+.tagv.v1 { left: 8px; } .tagv.v2 { right: 8px; background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.stage-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+.refs ul { margin: 0; padding-left: 18px; }
+.refs li::marker { color: var(--accent-text); }
+.subhead { font: 700 1.2rem/1.2 var(--display); margin-top: 8px; }
+.rows { display: flex; flex-direction: column; gap: 6px; background: var(--cap); padding: 8px; }
+.rows figure { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 10px; align-items: center; }
+.rows figcaption { margin: 0; font: 0.75rem var(--mono); color: #c9c5d4; }
+.rows img { display: block; }
+.shelf { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px; background: var(--cap); padding: 16px; }
+.shelf figcaption { color: #c9c5d4; }
+.gallery { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
+.gallery figure { max-width: 100%; }
+.gallery img { display: block; background: var(--cap); }
+.boxes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 244px), 1fr)); gap: 10px; }
+.boxes img { display: block; width: 244px; max-width: 100%; }
+
+/* pipeline */
+.pipe { min-width: 720px; }
+.pipe .node { fill: var(--surface); stroke: var(--line); stroke-width: 2; }
+.pipe .n { fill: var(--accent-text); font: 700 13px var(--display); }
+.pipe .t { fill: var(--ink); font: 700 17px var(--display); }
+.pipe .s { fill: var(--muted); font: 14px var(--body); }
+.pipe .arrow { stroke: var(--accent); stroke-width: 3; fill: none; }
+.pipe .head { fill: var(--accent); }
+
+/* numbers */
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.stat b { font: 700 clamp(1.6rem, 4vw, 2.1rem)/1 var(--display); color: var(--accent-text); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 0.88rem; color: var(--muted); }
+.chart-box { background: var(--surface); border: 1px solid var(--line); padding: 16px; }
+.chart { width: 100%; max-width: 720px; display: block; }
+.chart .grid { stroke: var(--line); stroke-width: 1; }
+.chart .axis { fill: var(--muted); font: 12px var(--mono); }
+.chart .lab { fill: var(--ink); font: 13px var(--mono); }
+.chart .val { fill: var(--muted); font: 12px var(--mono); }
+.chart .mark { fill: var(--mark); }
+.chart .bar:hover .mark { fill: var(--ink); }
+.split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+
+/* credits + store */
+.credits-img { background: #0b0b10; border: 3px solid var(--card-line); line-height: 0; }
+.cast-plates { display: flex; flex-wrap: wrap; gap: 10px; }
+.store-row { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; }
+.store-row figure { flex: 0 0 auto; width: 600px; max-width: 86vw; scroll-snap-align: start; }
+.store-row img { display: block; width: 600px; max-width: 100%; height: auto; border: 1px solid var(--line); }
+.store { display: grid; gap: 12px; }
+footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 18px; }
+
+@media (max-width: 1000px) {
+  .scene-grid, .char-grid, .stage-grid, .split { grid-template-columns: minmax(0, 1fr); }
+  .check img { width: calc(100% - 4px); height: auto; }
+}
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .wrap { gap: 64px; }
+  .build li { flex: 1 1 40%; }
+  .build img { width: 100%; height: auto; }
+  .tag { width: calc(50% - 8px); }
+  .tag img { width: 100%; height: auto; }
+  .timeline .span span { display: none; }
+}
+.bts { display: grid; gap: 16px; margin-top: 12px; scroll-margin-top: 64px; }
+.bts video { display: block; width: 100%; height: auto; }
+.bts-chapters { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; }
+}
+</style>
+<link rel="stylesheet" href="../assets/site-tabs.css">
+</head>
+<body class="site-body-padded">
+<a class="site-skip" href="#content">Skip to content</a>
+<nav class="site-tabs" aria-label="Site">
+  <ul>
+    <li><a href="../index.html">Pipeline</a></li>
+    <li><a href="../pixel-art-studio/index.html" aria-current="page">Pixel Art Studio</a></li>
+    <li><a href="../ashen-peak/index.html">Ashen Peak</a></li>
+    <li><a href="../drowned-shrine/index.html">Drowned Shrine</a></li>
+  </ul>
+</nav>
+<div class="wrap" id="content">
+<header class="mast">
+  <p class="eyebrow">Pixel Art Studio for Unity &middot; trailer breakdown</p>
+  <h1>Pixel Art Studio <span>Trailer</span></h1>
+  <p class="lede">An 87-second trailer at 480 &times; 270. Seven characters, five stages and a UI kit were built as <code>.pas</code> documents by agents working through the plugin's own verbs, then scripted beat by beat, recorded in Unity and checked pixel for pixel.</p>
+</header>
+</div>
+
+<nav class="nav" aria-label="Sections">
+  <ol>
+    <li><a href="#trailer">Trailer</a></li>
+    <li><a href="#script">Script</a></li>
+    <li><a href="#cast">Cast</a></li>
+    <li><a href="#world">World</a></li>
+    <li><a href="#made">How it was made</a></li>
+    <li><a href="#bts">Behind the scenes</a></li>
+    <li><a href="#fallbacks">Where the plugin fell short</a></li>
+    <li><a href="#numbers">Numbers</a></li>
+    <li><a href="#credits">Credits</a></li>
+  </ol>
+</nav>
+
+<div class="wrap" style="margin-top:40px">
+
+<section id="trailer" aria-labelledby="h-trailer">
+  <h2 id="h-trailer" class="sr">The trailer</h2>
+  <div class="screen">
+    <video id="trailer-video" controls preload="metadata" playsinline width="960" height="540" poster="media/poster.png" class="px">
+      <source src="PixelArtStudio-Trailer-native.webm" type='video/webm; codecs="vp9, opus"'>
+      <source src="PixelArtStudio-Trailer-x2.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="screen-meta mono"><span>87.0 s &middot; 5,220 frames at 60 fps &middot; 480 &times; 270 native</span><span id="scale-note">shown at x2, nearest neighbour</span></div>
+  <p class="watch"><a href="https://youtu.be/kO9-EMmBzIY">Watch in 4K on YouTube</a></p>
+  <div>
+    <div class="timeline" role="group" aria-label="Jump to a scene"><button class="span" type="button" data-t="0.0" style="--l:0.000%;--w:6.897%;--c:#3C7232;--ci:#F4F1E8" aria-label="PRESS START, 0:00 to 0:06"><span>INTRO</span></button><button class="span" type="button" data-t="6.0" style="--l:6.897%;--w:17.241%;--c:#A2453A;--ci:#F4F1E8" aria-label="1-1 LAYERS, 0:06 to 0:21"><span>1-1</span></button><button class="span" type="button" data-t="21.0" style="--l:24.138%;--w:14.943%;--c:#6E3B8E;--ci:#F4F1E8" aria-label="1-2 PALETTES, 0:21 to 0:34"><span>1-2</span></button><button class="span" type="button" data-t="34.0" style="--l:39.080%;--w:17.241%;--c:#4E4A63;--ci:#F4F1E8" aria-label="1-3 ANIMATION + TILES, 0:34 to 0:49"><span>1-3</span></button><button class="span" type="button" data-t="49.0" style="--l:56.322%;--w:17.241%;--c:#E3DCC6;--ci:#141218" aria-label="1-4 DRAWING TOOLS, 0:49 to 1:04"><span>1-4</span></button><button class="span" type="button" data-t="64.0" style="--l:73.563%;--w:9.195%;--c:#D9A63A;--ci:#141218" aria-label="ALL CLEAR, 1:04 to 1:12"><span>CLEAR</span></button><button class="span" type="button" data-t="72.0" style="--l:82.759%;--w:4.598%;--c:#24222E;--ci:#F4F1E8" aria-label="CREDITS, 1:12 to 1:16"><span>CR</span></button><button class="span" type="button" data-t="76.0" style="--l:87.356%;--w:12.644%;--c:#7A2F4F;--ci:#F4F1E8" aria-label="CONTINUE?, 1:16 to 1:27"><span>?</span></button><span class="head" id="playhead"></span></div>
+    <div class="ticks mono" aria-hidden="true"><span>0:00</span><span>0:30</span><span>1:00</span><span>1:27</span></div>
+  </div>
+  <p class="caption-line">Every sprite is a Pixel Art Studio file. The only things on screen that are not sprites are the iris wipe, a computed circle, and the camera's black clear colour.</p>
+  <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>File on this page</th><th>Format</th><th>Size</th></tr></thead>
+      <tbody><tr><td><a href="PixelArtStudio-Trailer-native.webm"><code>PixelArtStudio-Trailer-native.webm</code></a></td><td>480 &times; 270 VP9 4:4:4, Opus 128k (plays on this page)</td><td class="num">10.13 MB</td></tr><tr><td><a href="PixelArtStudio-Trailer-x2.mp4"><code>PixelArtStudio-Trailer-x2.mp4</code></a></td><td>960 &times; 540 H.264, AAC 192k (this page's fallback)</td><td class="num">8.83 MB</td></tr></tbody>
+    </table>
+  </div>
+  <p class="muted">The page plays the native WebM, and the x2 MP4 where WebM is not supported. The 4K and 1080p versions are on YouTube. All of them come from the same edit: the eight master takes joined without a resample, and a mix normalised to -14 LUFS.</p>
+</section>
+
+<section id="script" aria-labelledby="h-script">
+  <div class="sec-head">
+    <h2 id="h-script" class="levelcard">The script</h2>
+    <p>Eight scene files, compiled together into one <code>trailer.json</code>: 314 beats, 60 text rows, 63 audio slots and 217 rows on the cue sheet. A beat is one line of JSON: a camera cut or wipe, a tag to play, layers to hide or show, a palette to swap to, a move, a frozen clock, or a line of dialogue. Click a scene on the bar above to jump the trailer to it.</p>
+  </div>
+  
+<article class="scene" id="scene-intro" style="--c:#3C7232;--ci:#F4F1E8">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">PRESS START</h3>
+    <p class="scene-span mono">0:00&ndash;0:06 &middot; 6.0 s &middot; 360 frames &middot; 19 beats &middot; music M0</p>
+    <button class="seek" type="button" data-t="0.0">Play from 0:00</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> The map. Four levels, four features. The title plate, the cursor and the pulsing node are .pas documents too.</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/intro-f120.png">
+    <img class="px" src="media/scenes/intro-x2.gif" width="960" height="540" loading="lazy" alt="PRESS START, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/intro-f120.png" width="480" height="270" loading="lazy" alt="Master frame 120 of PRESS START at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 120</span> 2.0 s: the iris has opened; Sir Stacks starts down the path and the narrator box begins to type. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/Overworld.pas</code> <code>UI/Titles.pas</code> <code>Cast/Mira.pas</code> <code>Stages/NodePulse.pas</code> <code>Cast/SirStacks.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">hide <b>5</b></span> <span class="chip">camera <b>4</b></span> <span class="chip">tag <b>4</b></span> <span class="chip">move <b>2</b></span> <span class="chip">palette <b>2</b></span> <span class="chip">say <b>2</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">373 s wall &middot; FrameCheck 17/17 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-callout">PLAY 1-1</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate plate-none">NARRATOR</span><span class="kt">Four levels. Four features. Go!</span><span class="kat">2.0 s</span></li></ul>
+  <details class="beats"><summary>All 19 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr><tr><td class="num">0.00</td><td>hide</td><td>titles</td><td>hide THE END?</td></tr><tr><td class="num">0.00</td><td>hide</td><td>cursor</td><td>show Cursor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>cursor</td><td>hide Legs, Body, Head, FarArm, FarForearm, FarUpperArm, Pencil, NearArm, NearSleeve, NearHand, NearFingers</td></tr><tr><td class="num">0.00</td><td>tag</td><td>cursor</td><td>cursor (once)</td></tr><tr><td class="num">0.00</td><td>move</td><td>cursor</td><td>to [-1769, 143] over 1.35 s</td></tr><tr><td class="num">0.40</td><td>hide</td><td>titles</td><td>hide PRESS START</td></tr><tr><td class="num">0.80</td><td>hide</td><td>titles</td><td>show PRESS START</td></tr><tr><td class="num">1.40</td><td>palette</td><td>titles</td><td>Titles.pas &middot; flash 2</td></tr><tr><td class="num">1.40</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">1.50</td><td>camera</td><td></td><td>cut to [0, 0]</td></tr><tr><td class="num">1.50</td><td>camera</td><td></td><td>iris-in over 0.5 s</td></tr><tr><td class="num">2.00</td><td>tag</td><td>node</td><td>pulse</td></tr><tr><td class="num">2.00</td><td>tag</td><td>stacks</td><td>walk</td></tr><tr><td class="num">2.00</td><td>move</td><td>stacks</td><td>to [66, 227] over 2.1 s</td></tr><tr><td class="num">2.00</td><td>say</td><td></td><td>box: &ldquo;Four levels. Four features. Go!&rdquo; until 4.6</td></tr><tr><td class="num">4.10</td><td>tag</td><td>stacks</td><td>idle</td></tr><tr><td class="num">4.60</td><td>say</td><td></td><td>callout: &ldquo;PLAY 1-1&rdquo; until 5.6</td></tr><tr><td class="num">5.60</td><td>camera</td><td></td><td>iris-out over 0.4 s</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-s1-layers" style="--c:#A2453A;--ci:#F4F1E8">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">1-1 LAYERS</h3>
+    <p class="scene-span mono">0:06&ndash;0:21 &middot; 15.0 s &middot; 900 frames &middot; 29 beats &middot; music M1</p>
+    <button class="seek" type="button" data-t="6.0">Play from 0:06</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> Layers and sorting: visibility, complete hidden layers, groups, clipping and Y-sorting at runtime.</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/s1-layers-f648.png">
+    <img class="px" src="media/scenes/s1-layers-x2.gif" width="960" height="540" loading="lazy" alt="1-1 LAYERS, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/s1-layers-f648.png" width="480" height="270" loading="lazy" alt="Master frame 648 of 1-1 LAYERS at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 648</span> 10.8 s: Sir Stacks runs behind the first pillar and will pass in front of the second (Y-sort). FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/Courtyard.pas</code> <code>Cast/SirStacks.pas</code> <code>Stages/Pillar.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">hide <b>10</b></span> <span class="chip">say <b>6</b></span> <span class="chip">tag <b>5</b></span> <span class="chip">camera <b>4</b></span> <span class="chip">move <b>3</b></span> <span class="chip">wait <b>1</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">991 s wall &middot; FrameCheck 21/21 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-card">1-1 LAYERS</span> <span class="call call-label">CLIP</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate" style="--p:#2B569C">SIR STACKS</span><span class="kt">Every piece of me is a layer.</span><span class="kat">2.5 s</span></li><li class="kitbox"><span class="plate" style="--p:#2B569C">SIR STACKS</span><span class="kt">Oops. Not that far.</span><span class="kat">7.2 s</span></li><li class="kitbox"><span class="plate" style="--p:#2B569C">SIR STACKS</span><span class="kt">Sorting layers too! Look at me go! Woohoo!</span><span class="kat">10.0 s</span></li><li class="kitbox"><span class="plate plate-none">NARRATOR</span><span class="kt">...I&#x27;m okay.</span><span class="kat">13.6 s</span></li></ul>
+  <details class="beats"><summary>All 29 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr><tr><td class="num">0.00</td><td>say</td><td></td><td>card: &ldquo;1-1 LAYERS&rdquo; until 1.0</td></tr><tr><td class="num">1.00</td><td>camera</td><td></td><td>cut to [0, 0]</td></tr><tr><td class="num">1.00</td><td>tag</td><td>stacks</td><td>walk</td></tr><tr><td class="num">1.00</td><td>move</td><td>stacks</td><td>to [120, 200] over 1.5 s</td></tr><tr><td class="num">2.50</td><td>tag</td><td>stacks</td><td>idle</td></tr><tr><td class="num">2.50</td><td>say</td><td>stacks</td><td>box: &ldquo;Every piece of me is a layer.&rdquo; until 5.0</td></tr><tr><td class="num">4.50</td><td>hide</td><td>stacks</td><td>hide Helmet, Plume &middot; label -HELMET</td></tr><tr><td class="num">5.00</td><td>hide</td><td>stacks</td><td>hide Cape &middot; label -CAPE</td></tr><tr><td class="num">5.50</td><td>hide</td><td>stacks</td><td>hide Pauldrons &middot; label -PAULDRONS</td></tr><tr><td class="num">6.00</td><td>hide</td><td>stacks</td><td>hide Breastplate &middot; label -BREASTPLATE</td></tr><tr><td class="num">6.50</td><td>hide</td><td>stacks</td><td>hide Gauntlets, Greaves &middot; label -GREAVES</td></tr><tr><td class="num">7.00</td><td>hide</td><td>stacks</td><td>hide Tunic &middot; label -TUNIC</td></tr><tr><td class="num">7.00</td><td>hide</td><td>stacks</td><td>show Blush</td></tr><tr><td class="num">7.20</td><td>wait</td><td></td><td>clock frozen 1.8 s</td></tr><tr><td class="num">7.20</td><td>say</td><td>stacks</td><td>box: &ldquo;Oops. Not that far.&rdquo; until 9.0</td></tr><tr><td class="num">9.00</td><td>hide</td><td>stacks</td><td>hide Blush</td></tr><tr><td class="num">9.00</td><td>hide</td><td>stacks</td><td>show Outfit, Cape &middot; label GROUP</td></tr><tr><td class="num">9.00</td><td>tag</td><td>stacks</td><td>glint (once)</td></tr><tr><td class="num">9.50</td><td>say</td><td>stacks</td><td>label: &ldquo;CLIP&rdquo; until 10.0</td></tr><tr><td class="num">10.00</td><td>hide</td><td>stacks</td><td>hide Glint</td></tr><tr><td class="num">10.00</td><td>tag</td><td>stacks</td><td>run</td></tr><tr><td class="num">10.00</td><td>move</td><td>stacks</td><td>to [400, 200] over 2.8 s</td></tr><tr><td class="num">10.00</td><td>say</td><td>stacks</td><td>box: &ldquo;Sorting layers too! Look at me go! Woohoo!&rdquo; until 12.8</td></tr><tr><td class="num">12.80</td><td>tag</td><td>stacks</td><td>fall (once)</td></tr><tr><td class="num">12.80</td><td>move</td><td>stacks</td><td>to [430, 380] over 0.8 s</td></tr><tr><td class="num">13.60</td><td>camera</td><td></td><td>shake 2 px over 0.3 s</td></tr><tr><td class="num">13.60</td><td>say</td><td></td><td>box: &ldquo;...I&#x27;m okay.&rdquo; until 14.6</td></tr><tr><td class="num">14.60</td><td>camera</td><td></td><td>iris-out over 0.4 s</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-s2-palettes" style="--c:#6E3B8E;--ci:#F4F1E8">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">1-2 PALETTES</h3>
+    <p class="scene-span mono">0:21&ndash;0:34 &middot; 13.0 s &middot; 780 frames &middot; 32 beats &middot; music M2</p>
+    <button class="seek" type="button" data-t="21.0">Play from 0:21</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> Palette swaps: a runtime swap, colour cycling on the emblem, and a swap on a second sprite (Glob).</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/s2-palettes-f420.png">
+    <img class="px" src="media/scenes/s2-palettes-x2.gif" width="960" height="540" loading="lazy" alt="1-2 PALETTES, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/s2-palettes-f420.png" width="480" height="270" loading="lazy" alt="Master frame 420 of 1-2 PALETTES at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 420</span> 7.0 s: the switch to Captain Palette. Frames 420 and 421 are identical, so the switch is invisible. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/Rooftop.pas</code> <code>Cast/Pip.pas</code> <code>Cast/Glob.pas</code> <code>Stages/WaterTower.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">say <b>11</b></span> <span class="chip">tag <b>7</b></span> <span class="chip">palette <b>6</b></span> <span class="chip">hide <b>4</b></span> <span class="chip">camera <b>3</b></span> <span class="chip">move <b>1</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">575 s wall &middot; FrameCheck 19/19 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-card">1-2 PALETTES</span> <span class="call call-label">GOTH?</span> <span class="call call-label">BANANA?</span> <span class="call call-label">FESTIVE?</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate" style="--p:#265C39">GLOB</span><span class="kt">BLORP.</span><span class="kat">1.3 s</span></li><li class="kitbox"><span class="plate" style="--p:#206871">PIP</span><span class="kt">Stand back. Palette swap!</span><span class="kat">2.5 s</span></li><li class="kitbox"><span class="plate" style="--p:#206871">PIP</span><span class="kt">No. No. NO.</span><span class="kat">4.2 s</span></li><li class="kitbox"><span class="plate" style="--p:#9E1622;--pi:#FFE07A">CAPTAIN PALETTE</span><span class="kt">CAPTAIN PALETTE!</span><span class="kat">7.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#265C39">GLOB</span><span class="kt">...it&#x27;s the same guy.</span><span class="kat">8.5 s</span></li><li class="kitbox"><span class="plate" style="--p:#9E1622;--pi:#FFE07A">CAPTAIN PALETTE</span><span class="kt">Same pixels. New palette.</span><span class="kat">10.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#265C39">GLOB</span><span class="kt">blorp &lt;3</span><span class="kat">11.6 s</span></li></ul>
+  <details class="beats"><summary>All 32 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr><tr><td class="num">0.00</td><td>hide</td><td>captain</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>say</td><td></td><td>card: &ldquo;1-2 PALETTES&rdquo; until 1.0</td></tr><tr><td class="num">0.00</td><td>tag</td><td>pip</td><td>idle</td></tr><tr><td class="num">1.00</td><td>camera</td><td></td><td>cut to [0, 0]</td></tr><tr><td class="num">1.00</td><td>tag</td><td>glob</td><td>bounce</td></tr><tr><td class="num">1.00</td><td>move</td><td>glob</td><td>to [330, 214] over 1.5 s &middot; face left</td></tr><tr><td class="num">1.30</td><td>say</td><td>glob</td><td>box: &ldquo;BLORP.&rdquo; until 2.5</td></tr><tr><td class="num">2.50</td><td>tag</td><td>pip</td><td>nervous</td></tr><tr><td class="num">2.50</td><td>say</td><td>pip</td><td>box: &ldquo;Stand back. Palette swap!&rdquo; until 4.2</td></tr><tr><td class="num">4.20</td><td>palette</td><td>pip</td><td>PipGoth.pas &middot; flash 2</td></tr><tr><td class="num">4.20</td><td>say</td><td>pip</td><td>label: &ldquo;GOTH?&rdquo; until 4.8</td></tr><tr><td class="num">4.20</td><td>say</td><td>pip</td><td>box: &ldquo;No. No. NO.&rdquo; until 6.0</td></tr><tr><td class="num">4.80</td><td>palette</td><td>pip</td><td>PipBanana.pas &middot; flash 2</td></tr><tr><td class="num">4.80</td><td>say</td><td>pip</td><td>label: &ldquo;BANANA?&rdquo; until 5.4</td></tr><tr><td class="num">5.40</td><td>palette</td><td>pip</td><td>PipFestive.pas &middot; flash 2</td></tr><tr><td class="num">5.40</td><td>say</td><td>pip</td><td>label: &ldquo;FESTIVE?&rdquo; until 6.0</td></tr><tr><td class="num">6.00</td><td>tag</td><td>pip</td><td>spin (once)</td></tr><tr><td class="num">6.50</td><td>palette</td><td>pip</td><td>PipHero.pas &middot; flash 2 &middot; cycle</td></tr><tr><td class="num">7.00</td><td>hide</td><td>pip</td><td>hide whole actor</td></tr><tr><td class="num">7.00</td><td>hide</td><td>captain</td><td>show whole actor</td></tr><tr><td class="num">7.00</td><td>palette</td><td>captain</td><td>PipHero.pas &middot; cycle</td></tr><tr><td class="num">7.00</td><td>tag</td><td>captain</td><td>pose</td></tr><tr><td class="num">7.00</td><td>say</td><td>captain</td><td>box: &ldquo;CAPTAIN PALETTE!&rdquo; until 8.5</td></tr><tr><td class="num">8.50</td><td>tag</td><td>glob</td><td>talk</td></tr><tr><td class="num">8.50</td><td>say</td><td>glob</td><td>box: &ldquo;...it&#x27;s the same guy.&rdquo; until 10.0</td></tr><tr><td class="num">10.00</td><td>tag</td><td>glob</td><td>bounce</td></tr><tr><td class="num">10.00</td><td>say</td><td>captain</td><td>box: &ldquo;Same pixels. New palette.&rdquo; until 11.6</td></tr><tr><td class="num">11.60</td><td>palette</td><td>glob</td><td>GlobPink.pas &middot; flash 2</td></tr><tr><td class="num">11.60</td><td>hide</td><td>glob</td><td>show Blush</td></tr><tr><td class="num">11.60</td><td>say</td><td>glob</td><td>box: &ldquo;blorp &lt;3&rdquo; until 12.6</td></tr><tr><td class="num">12.60</td><td>camera</td><td></td><td>iris-out over 0.4 s</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-s3-tiles" style="--c:#4E4A63;--ci:#F4F1E8">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">1-3 ANIMATION + TILES</h3>
+    <p class="scene-span mono">0:34&ndash;0:49 &middot; 15.0 s &middot; 900 frames &middot; 75 beats &middot; music M3</p>
+    <button class="seek" type="button" data-t="34.0">Play from 0:34</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> Animation and tiles: tags with hit-stop timing, a Tile Palette export built row by row, and an adjustment layer (KO Grey).</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/s3-tiles-f480.png">
+    <img class="px" src="media/scenes/s3-tiles-x2.gif" width="960" height="540" loading="lazy" alt="1-3 ANIMATION + TILES, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/s3-tiles-f480.png" width="480" height="270" loading="lazy" alt="Master frame 480 of 1-3 ANIMATION + TILES at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 480</span> 8.0 s: the counter lands. A 0.10 s wait freezes the clock on the contact, then a 3 px shake. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/ArenaBackdrop.pas</code> <code>Stages/ArenaRows04-06.pas</code> <code>Stages/ArenaRows07-09.pas</code> <code>Stages/ArenaRows10-12.pas</code> <code>Stages/ArenaRows13-14.pas</code> <code>Stages/ArenaRows15-16.pas</code> <code>Stages/Torch.pas</code> <code>Stages/Banner.pas</code> <code>Cast/Brash.pas</code> <code>Cast/Bonk.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">hide <b>21</b></span> <span class="chip">move <b>18</b></span> <span class="chip">tag <b>17</b></span> <span class="chip">say <b>14</b></span> <span class="chip">camera <b>4</b></span> <span class="chip">wait <b>1</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">346 s wall &middot; FrameCheck 26/26 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-card">1-3 ANIMATION + TILES</span> <span class="call call-label">TILES</span> <span class="call call-callout">FIGHT!</span> <span class="call call-callout">[dash]</span> <span class="call call-callout">[combo]</span> <span class="call call-label">BLOCKED</span> <span class="call call-label">BLOCKED</span> <span class="call call-label">BLOCKED</span> <span class="call call-callout">[counter]</span> <span class="call call-callout">K.O.</span> <span class="call call-callout">BONK WINS</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate" style="--p:#702C7E">BRASH</span><span class="kt">Let me finish this fight quickly.</span><span class="kat">2.5 s</span></li><li class="kitbox"><span class="plate" style="--p:#465624">BONK</span><span class="kt">He forgot to tag a block.</span><span class="kat">10.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#465624">BONK</span><span class="kt">Next!</span><span class="kat">12.5 s</span></li></ul>
+  <details class="beats"><summary>All 75 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr><tr><td class="num">0.00</td><td>say</td><td></td><td>card: &ldquo;1-3 ANIMATION + TILES&rdquo; until 1.0</td></tr><tr><td class="num">0.00</td><td>hide</td><td>r04</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>r07</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>r10</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>r13</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>r15</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>torchL</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>torchR</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>banner</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>brash</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>bonk</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>move</td><td>r04</td><td>to [0, 16] over 0.0 s</td></tr><tr><td class="num">0.00</td><td>move</td><td>r07</td><td>to [0, 64] over 0.0 s</td></tr><tr><td class="num">0.00</td><td>move</td><td>r10</td><td>to [0, 112] over 0.0 s</td></tr><tr><td class="num">0.00</td><td>move</td><td>r13</td><td>to [0, 160] over 0.0 s</td></tr><tr><td class="num">0.00</td><td>move</td><td>r15</td><td>to [0, 192] over 0.0 s</td></tr><tr><td class="num">0.00</td><td>move</td><td>bonk</td><td>to [330, 217] over 0.0 s &middot; face left</td></tr><tr><td class="num">1.00</td><td>camera</td><td></td><td>cut to [0, 0]</td></tr><tr><td class="num">1.00</td><td>hide</td><td>r04</td><td>show whole actor</td></tr><tr><td class="num">1.00</td><td>move</td><td>r04</td><td>to [0, 64] over 0.2 s</td></tr><tr><td class="num">1.00</td><td>say</td><td>r04</td><td>label: &ldquo;TILES&rdquo; until 2.5</td></tr><tr><td class="num">1.30</td><td>hide</td><td>r07</td><td>show whole actor</td></tr><tr><td class="num">1.30</td><td>move</td><td>r07</td><td>to [0, 112] over 0.2 s</td></tr><tr><td class="num">1.50</td><td>hide</td><td>torchL</td><td>show whole actor</td></tr><tr><td class="num">1.50</td><td>hide</td><td>torchR</td><td>show whole actor</td></tr><tr><td class="num">1.50</td><td>hide</td><td>banner</td><td>show whole actor</td></tr><tr><td class="num">1.50</td><td>tag</td><td>torchL</td><td>burn</td></tr><tr><td class="num">1.50</td><td>tag</td><td>torchR</td><td>burn</td></tr><tr><td class="num">1.50</td><td>tag</td><td>banner</td><td>sway</td></tr><tr><td class="num">1.60</td><td>hide</td><td>r10</td><td>show whole actor</td></tr><tr><td class="num">1.60</td><td>move</td><td>r10</td><td>to [0, 160] over 0.2 s</td></tr><tr><td class="num">1.90</td><td>hide</td><td>r13</td><td>show whole actor</td></tr><tr><td class="num">1.90</td><td>move</td><td>r13</td><td>to [0, 208] over 0.2 s</td></tr><tr><td class="num">2.20</td><td>hide</td><td>r15</td><td>show whole actor</td></tr><tr><td class="num">2.20</td><td>move</td><td>r15</td><td>to [0, 240] over 0.2 s</td></tr><tr><td class="num">2.50</td><td>hide</td><td>brash</td><td>show whole actor</td></tr><tr><td class="num">2.50</td><td>hide</td><td>bonk</td><td>show whole actor</td></tr><tr><td class="num">2.50</td><td>tag</td><td>brash</td><td>idle</td></tr><tr><td class="num">2.50</td><td>tag</td><td>bonk</td><td>idle</td></tr><tr><td class="num">2.50</td><td>say</td><td>brash</td><td>box: &ldquo;Let me finish this fight quickly.&rdquo; until 4.5</td></tr><tr><td class="num">4.50</td><td>say</td><td></td><td>callout: &ldquo;FIGHT!&rdquo; until 5.0</td></tr><tr><td class="num">5.00</td><td>tag</td><td>brash</td><td>dash (once)</td></tr><tr><td class="num">5.00</td><td>move</td><td>brash</td><td>to [262, 214] over 0.6 s</td></tr><tr><td class="num">5.00</td><td>say</td><td></td><td>callout: &ldquo;[dash]&rdquo; until 5.6</td></tr><tr><td class="num">5.60</td><td>tag</td><td>brash</td><td>combo (once)</td></tr><tr><td class="num">5.60</td><td>say</td><td></td><td>callout: &ldquo;[combo]&rdquo; until 7.4</td></tr><tr><td class="num">5.80</td><td>tag</td><td>bonk</td><td>block (once)</td></tr><tr><td class="num">5.80</td><td>say</td><td>bonk</td><td>label: &ldquo;BLOCKED&rdquo; until 6.3</td></tr><tr><td class="num">6.20</td><td>move</td><td>brash</td><td>to [268, 214] over 0.2 s</td></tr><tr><td class="num">6.40</td><td>tag</td><td>bonk</td><td>block (once)</td></tr><tr><td class="num">6.40</td><td>say</td><td>bonk</td><td>label: &ldquo;BLOCKED&rdquo; until 6.9</td></tr><tr><td class="num">6.80</td><td>move</td><td>brash</td><td>to [272, 214] over 0.2 s</td></tr><tr><td class="num">7.00</td><td>tag</td><td>bonk</td><td>block (once)</td></tr><tr><td class="num">7.00</td><td>say</td><td>bonk</td><td>label: &ldquo;BLOCKED&rdquo; until 7.5</td></tr><tr><td class="num">7.40</td><td>tag</td><td>bonk</td><td>counter (once)</td></tr><tr><td class="num">7.40</td><td>tag</td><td>brash</td><td>idle</td></tr><tr><td class="num">7.40</td><td>move</td><td>brash</td><td>to [268, 214] over 0.2 s</td></tr><tr><td class="num">7.40</td><td>say</td><td></td><td>callout: &ldquo;[counter]&rdquo; until 8.4</td></tr><tr><td class="num">8.00</td><td>wait</td><td></td><td>clock frozen 0.1 s</td></tr><tr><td class="num">8.00</td><td>tag</td><td>brash</td><td>hurt (once)</td></tr><tr><td class="num">8.10</td><td>camera</td><td></td><td>shake 3 px over 0.2 s</td></tr><tr><td class="num">8.10</td><td>move</td><td>brash</td><td>to [262, 214] over 0.3 s</td></tr><tr><td class="num">8.40</td><td>tag</td><td>brash</td><td>ko (once)</td></tr><tr><td class="num">8.40</td><td>hide</td><td>brash</td><td>show KO Grey</td></tr><tr><td class="num">8.40</td><td>move</td><td>brash</td><td>to [244, 196] over 0.3 s</td></tr><tr><td class="num">8.40</td><td>say</td><td></td><td>callout: &ldquo;K.O.&rdquo; until 10.0</td></tr><tr><td class="num">8.70</td><td>move</td><td>brash</td><td>to [222, 214] over 0.3 s</td></tr><tr><td class="num">9.40</td><td>tag</td><td>bonk</td><td>idle</td></tr><tr><td class="num">10.00</td><td>tag</td><td>bonk</td><td>talk</td></tr><tr><td class="num">10.00</td><td>say</td><td>bonk</td><td>box: &ldquo;He forgot to tag a block.&rdquo; until 12.5</td></tr><tr><td class="num">12.50</td><td>tag</td><td>bonk</td><td>shrug (once)</td></tr><tr><td class="num">12.50</td><td>say</td><td>bonk</td><td>box: &ldquo;Next!&rdquo; until 14.6</td></tr><tr><td class="num">13.00</td><td>say</td><td></td><td>callout: &ldquo;BONK WINS&rdquo; until 14.6</td></tr><tr><td class="num">14.60</td><td>camera</td><td></td><td>iris-out over 0.4 s</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-s4-tools" style="--c:#E3DCC6;--ci:#141218">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">1-4 DRAWING TOOLS</h3>
+    <p class="scene-span mono">0:49&ndash;1:04 &middot; 15.0 s &middot; 900 frames &middot; 100 beats &middot; music M4</p>
+    <button class="seek" type="button" data-t="49.0">Play from 0:49</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> Drawing tools: Curve with pixel-perfect, Free Transform, custom brush, pen pressure, Text, Blur and Scramble.</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/s4-tools-f630.png">
+    <img class="px" src="media/scenes/s4-tools-x2.gif" width="960" height="540" loading="lazy" alt="1-4 DRAWING TOOLS, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/s4-tools-f630.png" width="480" height="270" loading="lazy" alt="Master frame 630 of 1-4 DRAWING TOOLS at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 630</span> 10.5 s: Doodle rises off the page. The sign&#x27;s text was written with the Text tool. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/Sketch.pas</code> <code>Cast/Mira.pas</code> <code>Stages/Bridge.pas</code> <code>Stages/Boulder.pas</code> <code>Stages/Flowers.pas</code> <code>Stages/Grass.pas</code> <code>Stages/Sign.pas</code> <code>Cast/Doodle.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">move <b>52</b></span> <span class="chip">tag <b>16</b></span> <span class="chip">palette <b>13</b></span> <span class="chip">say <b>11</b></span> <span class="chip">hide <b>5</b></span> <span class="chip">camera <b>3</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">371 s wall &middot; FrameCheck 26/26 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-card">1-4 DRAWING TOOLS</span> <span class="call call-label">CURVE + PIXEL-PERFECT</span> <span class="call call-label">FREE TRANSFORM</span> <span class="call call-label">CUSTOM BRUSH</span> <span class="call call-label">PEN PRESSURE</span> <span class="call call-label">TEXT TOOL</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate" style="--p:#6F2546">MIRA</span><span class="kt">Need a bridge?</span><span class="kat">1.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#4A4A55">DOODLE</span><span class="kt">RAWR.</span><span class="kat">10.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#6F2546">MIRA</span><span class="kt">Blur!</span><span class="kat">11.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#6F2546">MIRA</span><span class="kt">Scramble!</span><span class="kat">12.0 s</span></li><li class="kitbox"><span class="plate" style="--p:#6F2546">MIRA</span><span class="kt">Fixed it.</span><span class="kat">13.0 s</span></li></ul>
+  <details class="beats"><summary>All 100 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr><tr><td class="num">0.00</td><td>hide</td><td>cursor</td><td>show Cursor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>cursor</td><td>hide Legs, Body, Head, FarArm, FarForearm, FarUpperArm, Pencil, NearArm, NearSleeve, NearHand, NearFingers</td></tr><tr><td class="num">0.00</td><td>tag</td><td>cursor</td><td>cursor (once)</td></tr><tr><td class="num">0.00</td><td>hide</td><td>doodle</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>say</td><td></td><td>card: &ldquo;1-4 DRAWING TOOLS&rdquo; until 1.0</td></tr><tr><td class="num">1.00</td><td>camera</td><td></td><td>cut to [0, 0]</td></tr><tr><td class="num">1.00</td><td>tag</td><td>mira</td><td>idle</td></tr><tr><td class="num">1.00</td><td>say</td><td>mira</td><td>box: &ldquo;Need a bridge?&rdquo; until 2.25</td></tr><tr><td class="num">2.20</td><td>tag</td><td>mira</td><td>draw</td></tr><tr><td class="num">2.20</td><td>tag</td><td>bridge</td><td>curve (once)</td></tr><tr><td class="num">2.20</td><td>say</td><td>bridge</td><td>label: &ldquo;CURVE + PIXEL-PERFECT&rdquo; until 4.0</td></tr><tr><td class="num">2.20</td><td>move</td><td>cursor</td><td>3 moves, 2.2&ndash;2.35 s, ending at [195, 201]</td></tr><tr><td class="num">2.35</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">2.45</td><td>move</td><td>cursor</td><td>to [266, 201] over 0.0 s</td></tr><tr><td class="num">2.45</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">2.50</td><td>move</td><td>cursor</td><td>3 moves, 2.5&ndash;2.65 s, ending at [207, 201]</td></tr><tr><td class="num">2.65</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">2.75</td><td>move</td><td>cursor</td><td>to [254, 201] over 0.0 s</td></tr><tr><td class="num">2.75</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">2.80</td><td>move</td><td>cursor</td><td>3 moves, 2.8&ndash;2.95 s, ending at [207, 204]</td></tr><tr><td class="num">2.95</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">3.05</td><td>move</td><td>cursor</td><td>to [254, 204] over 0.0 s</td></tr><tr><td class="num">3.05</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">3.30</td><td>move</td><td>cursor</td><td>to [69, 177] over 0.6 s</td></tr><tr><td class="num">4.00</td><td>tag</td><td>mira</td><td>idle</td></tr><tr><td class="num">4.00</td><td>tag</td><td>boulder</td><td>turn (once)</td></tr><tr><td class="num">4.00</td><td>say</td><td>boulder</td><td>label: &ldquo;FREE TRANSFORM&rdquo; until 5.5</td></tr><tr><td class="num">4.10</td><td>move</td><td>cursor</td><td>4 moves, 4.1&ndash;4.9 s, ending at [289, 190]</td></tr><tr><td class="num">5.50</td><td>tag</td><td>mira</td><td>stamp</td></tr><tr><td class="num">5.50</td><td>tag</td><td>flowers</td><td>stamp (once)</td></tr><tr><td class="num">5.50</td><td>say</td><td>flowers</td><td>label: &ldquo;CUSTOM BRUSH&rdquo; until 7.0</td></tr><tr><td class="num">5.70</td><td>move</td><td>cursor</td><td>to [309, 190] over 0.0 s</td></tr><tr><td class="num">5.70</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">6.00</td><td>move</td><td>cursor</td><td>to [329, 190] over 0.0 s</td></tr><tr><td class="num">6.00</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">6.30</td><td>move</td><td>cursor</td><td>to [349, 190] over 0.0 s</td></tr><tr><td class="num">6.30</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">6.60</td><td>move</td><td>cursor</td><td>to [369, 190] over 0.0 s</td></tr><tr><td class="num">6.60</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">7.00</td><td>tag</td><td>mira</td><td>draw</td></tr><tr><td class="num">7.00</td><td>tag</td><td>grass</td><td>pressure (once)</td></tr><tr><td class="num">7.00</td><td>say</td><td>grass</td><td>label: &ldquo;PEN PRESSURE&rdquo; until 8.3</td></tr><tr><td class="num">7.00</td><td>move</td><td>cursor</td><td>23 moves, 7.0&ndash;7.95 s, ending at [80, 160]</td></tr><tr><td class="num">8.30</td><td>tag</td><td>mira</td><td>point</td></tr><tr><td class="num">8.30</td><td>move</td><td>mira</td><td>to [160, 198] over 0.0 s &middot; face left</td></tr><tr><td class="num">8.30</td><td>tag</td><td>sign</td><td>text (once)</td></tr><tr><td class="num">8.30</td><td>say</td><td>sign</td><td>label: &ldquo;TEXT TOOL&rdquo; until 10.0</td></tr><tr><td class="num">8.60</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">9.00</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">9.45</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">10.00</td><td>hide</td><td>cursor</td><td>hide whole actor</td></tr><tr><td class="num">10.00</td><td>tag</td><td>mira</td><td>idle</td></tr><tr><td class="num">10.00</td><td>move</td><td>mira</td><td>to [160, 198] over 0.0 s &middot; face right</td></tr><tr><td class="num">10.00</td><td>hide</td><td>doodle</td><td>show whole actor</td></tr><tr><td class="num">10.00</td><td>tag</td><td>doodle</td><td>rise (once)</td></tr><tr><td class="num">10.00</td><td>say</td><td>doodle</td><td>box: &ldquo;RAWR.&rdquo; until 11.0</td></tr><tr><td class="num">11.00</td><td>tag</td><td>doodle</td><td>blur (once)</td></tr><tr><td class="num">11.00</td><td>say</td><td>mira</td><td>box: &ldquo;Blur!&rdquo; until 12.0</td></tr><tr><td class="num">12.00</td><td>tag</td><td>doodle</td><td>scramble (once)</td></tr><tr><td class="num">12.00</td><td>say</td><td>mira</td><td>box: &ldquo;Scramble!&rdquo; until 13.0</td></tr><tr><td class="num">13.00</td><td>say</td><td>mira</td><td>box: &ldquo;Fixed it.&rdquo; until 14.6</td></tr><tr><td class="num">13.00</td><td>move</td><td>doodle</td><td>6 moves, 13.0&ndash;14.0 s, ending at [510, 200]</td></tr><tr><td class="num">14.60</td><td>camera</td><td></td><td>iris-out over 0.4 s</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-outro" style="--c:#D9A63A;--ci:#141218">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">ALL CLEAR</h3>
+    <p class="scene-span mono">1:04&ndash;1:12 &middot; 8.0 s &middot; 480 frames &middot; 24 beats &middot; music M5</p>
+    <button class="seek" type="button" data-t="64.0">Play from 1:04</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> The agents: the whole cast, every stage and the UI, built through the agent surface.</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/outro-f300.png">
+    <img class="px" src="media/scenes/outro-x2.gif" width="960" height="540" loading="lazy" alt="ALL CLEAR, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/outro-f300.png" width="480" height="270" loading="lazy" alt="Master frame 300 of ALL CLEAR at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 300</span> 5.0 s: the lineup on the starred map, with the logo and the end card. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/OverworldStarred.pas</code> <code>Stages/Castle.pas</code> <code>UI/Logo.pas</code> <code>UI/EndCard.pas</code> <code>Cast/SirStacks.pas</code> <code>Cast/Glob.pas</code> <code>Cast/Pip.pas</code> <code>Cast/Bonk.pas</code> <code>Cast/Brash.pas</code> <code>Cast/Mira.pas</code> <code>Cast/Doodle.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">tag <b>7</b></span> <span class="chip">hide <b>6</b></span> <span class="chip">move <b>5</b></span> <span class="chip">camera <b>2</b></span> <span class="chip">say <b>2</b></span> <span class="chip">palette <b>2</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">207 s wall &middot; FrameCheck 16/16 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-callout">ALL CLEAR</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate" style="--p:#2B569C">SIR STACKS</span><span class="kt">Wait for me!</span><span class="kat">1.0 s</span></li></ul>
+  <details class="beats"><summary>All 24 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>iris-in over 0.5 s</td></tr><tr><td class="num">0.00</td><td>say</td><td></td><td>callout: &ldquo;ALL CLEAR&rdquo; until 1.0</td></tr><tr><td class="num">0.00</td><td>hide</td><td>endcard</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>palette</td><td>captain</td><td>PipHero.pas &middot; cycle</td></tr><tr><td class="num">0.00</td><td>tag</td><td>captain</td><td>pose</td></tr><tr><td class="num">0.00</td><td>tag</td><td>glob</td><td>bounce</td></tr><tr><td class="num">0.00</td><td>tag</td><td>brash</td><td>idle</td></tr><tr><td class="num">0.00</td><td>tag</td><td>bonk</td><td>idle</td></tr><tr><td class="num">0.00</td><td>tag</td><td>mira</td><td>idle</td></tr><tr><td class="num">0.00</td><td>palette</td><td>glob</td><td>GlobPink.pas</td></tr><tr><td class="num">0.00</td><td>hide</td><td>glob</td><td>show Blush</td></tr><tr><td class="num">0.00</td><td>hide</td><td>stacks</td><td>hide Outfit, Cape</td></tr><tr><td class="num">1.00</td><td>move</td><td>stacks</td><td>to [-20, 213] over 0.0 s</td></tr><tr><td class="num">1.00</td><td>tag</td><td>stacks</td><td>run</td></tr><tr><td class="num">1.00</td><td>move</td><td>stacks</td><td>to [80, 213] over 1.0 s</td></tr><tr><td class="num">1.00</td><td>say</td><td>stacks</td><td>box: &ldquo;Wait for me!&rdquo; until 2.4</td></tr><tr><td class="num">2.00</td><td>tag</td><td>stacks</td><td>idle</td></tr><tr><td class="num">2.40</td><td>hide</td><td>endcard</td><td>show whole actor</td></tr><tr><td class="num">2.40</td><td>hide</td><td>endcard</td><td>hide Line 1, Line 2</td></tr><tr><td class="num">2.40</td><td>move</td><td>logo</td><td>2 moves, 2.4&ndash;3.6 s, ending at [240, 134]</td></tr><tr><td class="num">3.60</td><td>hide</td><td>endcard</td><td>show Line 1, Line 2</td></tr><tr><td class="num">3.70</td><td>move</td><td>logo</td><td>to [240, 136] over 0.1 s</td></tr><tr><td class="num">7.80</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-credits" style="--c:#24222E;--ci:#F4F1E8">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">CREDITS</h3>
+    <p class="scene-span mono">1:12&ndash;1:16 &middot; 4.0 s &middot; 240 frames &middot; 1 beats &middot; music M7</p>
+    <button class="seek" type="button" data-t="72.0">Play from 1:12</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> The credits sheet is UI/Credits.pas, rising 2 px a frame.</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/credits-f120.png">
+    <img class="px" src="media/scenes/credits-x2.gif" width="960" height="540" loading="lazy" alt="CREDITS, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/credits-f120.png" width="480" height="270" loading="lazy" alt="Master frame 120 of CREDITS at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 120</span> 2.0 s: the sheet mid-rise. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>UI/Credits.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">move <b>1</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">96 s wall &middot; FrameCheck 5/5 frames at 0 px</dd></div>
+      </dl>
+      
+    </div>
+  </div>
+  
+  <details class="beats"><summary>All 1 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>move</td><td>sheet</td><td>to [240, -2] over 3.8 s</td></tr></tbody></table></div>
+  </details>
+</article>
+<article class="scene" id="scene-post-credit" style="--c:#7A2F4F;--ci:#F4F1E8">
+  <header class="scene-head">
+    <h3 class="levelcard levelcard-sm">CONTINUE?</h3>
+    <p class="scene-span mono">1:16&ndash;1:27 &middot; 11.0 s &middot; 660 frames &middot; 34 beats</p>
+    <button class="seek" type="button" data-t="76.0">Play from 1:16</button>
+  </header>
+  <p class="sells"><span class="eyebrow">Sells</span> Undo and Redo through the document history, with their default keys.</p>
+  <figure class="screen">
+    <picture><source media="(prefers-reduced-motion: reduce)" srcset="media/scenes/post-credit-f498.png">
+    <img class="px" src="media/scenes/post-credit-x2.gif" width="960" height="540" loading="lazy" alt="CONTINUE?, the scene at x2, 30 fps"></picture>
+  </figure>
+  <div class="scene-grid">
+    <figure class="check">
+      <img class="px" src="media/scenes/post-credit-f498.png" width="480" height="270" loading="lazy" alt="Master frame 498 of CONTINUE? at native size">
+      <figcaption><span class="ok">0 px</span> <span class="mono">frame 498</span> 8.3 s: CTRL+Y has put the KO back. KO Grey is shown again. FrameCheck rebuilt it from fresh plugin renders: 0 of 129,600 pixels different, and the recorded x4 and x8 frames are exact nearest-neighbour upscales.</figcaption>
+    </figure>
+    <div class="scene-facts">
+      <dl class="facts">
+        <div><dt>Documents</dt><dd><code>Stages/Arena.pas</code> <code>Cast/Brash.pas</code> <code>Cast/Mira.pas</code> <code>Cast/Bonk.pas</code> <code>UI/Titles.pas</code> <code>Stages/Torch.pas</code> <code>Stages/Banner.pas</code></dd></div>
+        <div><dt>Beat kinds</dt><dd><span class="chip">hide <b>12</b></span> <span class="chip">tag <b>8</b></span> <span class="chip">say <b>7</b></span> <span class="chip">camera <b>3</b></span> <span class="chip">move <b>2</b></span> <span class="chip">palette <b>2</b></span></dd></div>
+        <div><dt>Master take</dt><dd class="mono">254 s wall &middot; FrameCheck 15/15 frames at 0 px</dd></div>
+      </dl>
+      <p class="calls"><span class="call call-label">CTRL+Z</span> <span class="call call-label">UNDO</span> <span class="call call-label">CTRL+Y</span> <span class="call call-label">REDO</span></p>
+    </div>
+  </div>
+  <ul class="kitboxes" aria-label="Dialogue"><li class="kitbox"><span class="plate" style="--p:#702C7E">BRASH</span><span class="kt">...Is it over?</span><span class="kat">1.4 s</span></li><li class="kitbox"><span class="plate" style="--p:#702C7E">BRASH</span><span class="kt">Undo works on me?! Rematch!</span><span class="kat">4.8 s</span></li><li class="kitbox"><span class="plate" style="--p:#465624">BONK</span><span class="kt">Redo works too.</span><span class="kat">8.3 s</span></li></ul>
+  <details class="beats"><summary>All 34 beats <span class="muted">(runs of moves on one actor folded)</span></summary>
+    <div class="scroll"><table class="tbl beats-tbl"><thead><tr><th>at (s)</th><th>kind</th><th>actor</th><th>detail</th></tr></thead><tbody><tr><td class="num">0.00</td><td>camera</td><td></td><td>cut to [-2000, 0]</td></tr><tr><td class="num">0.00</td><td>tag</td><td>brash</td><td>ko (once)</td></tr><tr><td class="num">0.00</td><td>hide</td><td>brash</td><td>show KO Grey</td></tr><tr><td class="num">0.00</td><td>hide</td><td>bonk</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>titles</td><td>hide whole actor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>titles</td><td>hide PRESS START</td></tr><tr><td class="num">0.00</td><td>hide</td><td>cursor</td><td>show Cursor</td></tr><tr><td class="num">0.00</td><td>hide</td><td>cursor</td><td>hide Legs, Body, Head, FarArm, FarForearm, FarUpperArm, Pencil, NearArm, NearSleeve, NearHand, NearFingers</td></tr><tr><td class="num">0.00</td><td>tag</td><td>cursor</td><td>cursor (once)</td></tr><tr><td class="num">0.00</td><td>tag</td><td>torchL</td><td>burn</td></tr><tr><td class="num">0.00</td><td>tag</td><td>torchR</td><td>burn</td></tr><tr><td class="num">0.00</td><td>tag</td><td>banner</td><td>sway</td></tr><tr><td class="num">1.00</td><td>camera</td><td></td><td>cut to [0, 0]</td></tr><tr><td class="num">1.00</td><td>camera</td><td></td><td>iris-in over 0.4 s</td></tr><tr><td class="num">1.40</td><td>say</td><td>brash</td><td>box: &ldquo;...Is it over?&rdquo; until 3.2</td></tr><tr><td class="num">3.20</td><td>move</td><td>cursor</td><td>to [183, 187] over 0.5 s</td></tr><tr><td class="num">3.20</td><td>say</td><td>cursor</td><td>label: &ldquo;CTRL+Z&rdquo; until 3.8</td></tr><tr><td class="num">3.70</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">3.80</td><td>tag</td><td>brash</td><td>rise (once)</td></tr><tr><td class="num">3.80</td><td>hide</td><td>brash</td><td>hide KO Grey</td></tr><tr><td class="num">3.80</td><td>say</td><td>brash</td><td>label: &ldquo;UNDO&rdquo; until 4.8</td></tr><tr><td class="num">4.80</td><td>tag</td><td>brash</td><td>idle</td></tr><tr><td class="num">4.80</td><td>move</td><td>cursor</td><td>to [231, 159] over 0.4 s</td></tr><tr><td class="num">4.80</td><td>say</td><td>brash</td><td>box: &ldquo;Undo works on me?! Rematch!&rdquo; until 6.8</td></tr><tr><td class="num">6.80</td><td>palette</td><td>cursor</td><td>Mira.pas &middot; flash 2</td></tr><tr><td class="num">6.80</td><td>say</td><td>cursor</td><td>label: &ldquo;CTRL+Y&rdquo; until 7.3</td></tr><tr><td class="num">7.30</td><td>tag</td><td>brash</td><td>ko (once)</td></tr><tr><td class="num">7.30</td><td>say</td><td>brash</td><td>label: &ldquo;REDO&rdquo; until 8.3</td></tr><tr><td class="num">7.70</td><td>hide</td><td>brash</td><td>show KO Grey</td></tr><tr><td class="num">8.30</td><td>hide</td><td>cursor</td><td>hide whole actor</td></tr><tr><td class="num">8.30</td><td>say</td><td>bonk</td><td>box: &ldquo;Redo works too.&rdquo; until 9.8</td></tr><tr><td class="num">9.80</td><td>hide</td><td>titles</td><td>show whole actor</td></tr><tr><td class="num">10.40</td><td>hide</td><td>titles</td><td>hide THE END?</td></tr><tr><td class="num">10.80</td><td>hide</td><td>titles</td><td>show THE END?</td></tr></tbody></table></div>
+  </details>
+</article>
+</section>
+
+<section id="cast" aria-labelledby="h-cast">
+  <div class="sec-head">
+    <h2 id="h-cast" class="levelcard">The cast</h2>
+    <p>Each character started as one Krea 2 picture. An agent imported it onto a 16 px grid, peeled it into pieces on separate layers, filled what each piece hides, and posed the pieces about their joints to make every frame. The rest frame must equal the design at 0 px, and every frame must have 0 pinholes and 0 islands in every hide state the scenes use.</p>
+  </div>
+  
+<article class="char" id="cast-sir-stacks">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#2B569C">SIR STACKS</h3>
+    <p class="mono muted"><code>Cast/SirStacks.pas</code> &middot; 128 &times; 96 Indexed &middot; in PRESS START, 1-1 LAYERS, ALL CLEAR</p>
+  </header>
+  <p class="char-note">Every piece of armour is its own layer, so Scene 1 can take it off one piece at a time. Hidden fills under each joint keep every undressed state free of holes.</p>
+  <ol class="build" aria-label="From design to rest frame">
+    <li><figure><img src="media/cast/sir-stacks-design.png" width="192" height="192" loading="lazy" alt="The Krea 2 design"><figcaption><b>Design</b> Krea 2 picture, 64 &times; 64 cells of 16 px</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/sir-stacks-grid6.png" width="192" height="192" loading="lazy" alt="The design on its grid"><figcaption><b>Grid</b> one colour per cell, x3</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/sir-stacks-ref.png" width="256" height="192" loading="lazy" alt="The design reference"><figcaption><b>Reference</b> the imported design, x2</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/sir-stacks-rest.png" width="256" height="192" loading="lazy" alt="The finished rest frame"><figcaption><b>Rest frame</b> the layered sprite, x2 <span class="ok">0 px</span></figcaption></figure></li>
+  </ol>
+  <div class="char-grid">
+    <figure class="pieces"><div class="scroll"><img class="px" src="media/cast/sir-stacks-pieces.png" loading="lazy" alt="The pieces of Sir Stacks"></div><figcaption>26 pieces, cropped, at x2: Blush, Body, Boxers, Breastplate, Cape, FarFoot, FarForearm, FarGauntlet, FarGreave, FarPauldron, FarShin, FarThigh, FarUpperArm, Glint, Head, Helmet, NearFoot, NearForearm, NearGauntlet, NearGreave, NearPauldron, NearShin, NearThigh, NearUpperArm, Plume, Tunic.</figcaption></figure>
+    <div class="tree"><p class="eyebrow">Layer tree, front first (35)</p><ul><li class="grp">Outfit<ul><li class="grp">Armour<ul><li class="lyr">Plume</li><li class="lyr">Helmet</li><li class="grp">Gauntlets<ul><li class="lyr">NearGauntlet</li><li class="lyr">FarGauntlet</li></ul></li><li class="grp">Pauldrons<ul><li class="lyr">NearPauldron</li><li class="lyr">FarPauldron</li></ul></li><li class="lyr">Glint</li><li class="lyr">Breastplate</li><li class="grp">Greaves<ul><li class="lyr">NearGreave</li><li class="lyr">FarGreave</li></ul></li></ul></li><li class="lyr">Tunic</li></ul></li><li class="grp">NearArm<ul><li class="lyr">NearForearm</li><li class="lyr">NearUpperArm</li></ul></li><li class="lyr">Boxers</li><li class="grp">NearLeg<ul><li class="lyr">NearFoot</li><li class="lyr">NearShin</li><li class="lyr">NearThigh</li></ul></li><li class="lyr">Blush</li><li class="lyr">Head</li><li class="lyr">Body</li><li class="grp">FarArm<ul><li class="lyr">FarForearm</li><li class="lyr">FarUpperArm</li></ul></li><li class="grp">FarLeg<ul><li class="lyr">FarFoot</li><li class="lyr">FarShin</li><li class="lyr">FarThigh</li></ul></li><li class="lyr">Cape</li></ul></div>
+  </div>
+  
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/sir-stacks-rest.png">
+<img class="px" src="media/cast/sir-stacks-idle.gif" width="256" height="192" loading="lazy" alt="idle tag"></picture>
+<figcaption><b>idle</b> <span class="mono">frames 0&ndash;3 &middot; 4 f &middot; 200 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/sir-stacks-rest.png">
+<img class="px" src="media/cast/sir-stacks-walk.gif" width="256" height="192" loading="lazy" alt="walk tag"></picture>
+<figcaption><b>walk</b> <span class="mono">frames 4&ndash;11 &middot; 8 f &middot; 100 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/sir-stacks-rest.png">
+<img class="px" src="media/cast/sir-stacks-run.gif" width="256" height="192" loading="lazy" alt="run tag"></picture>
+<figcaption><b>run</b> <span class="mono">frames 12&ndash;19 &middot; 8 f &middot; 50 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/sir-stacks-rest.png">
+<img class="px" src="media/cast/sir-stacks-fall.gif" width="256" height="192" loading="lazy" alt="fall tag"></picture>
+<figcaption><b>fall</b> <span class="mono">frames 20&ndash;23 &middot; 4 f &middot; 200 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/sir-stacks-rest.png">
+<img class="px" src="media/cast/sir-stacks-glint.gif" width="256" height="192" loading="lazy" alt="glint tag"></picture>
+<figcaption><b>glint</b> <span class="mono">frames 24&ndash;27 &middot; 4 f &middot; 250 ms each &middot; once</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame pinhole and island counts</summary><figure class="strip"><figcaption>idle</figcaption><div class="scroll"><img class="px" src="media/cast/sir-stacks-idle-strip.png" width="1044" height="200" loading="lazy" alt="idle strip with per-frame counts"></div></figure><figure class="strip"><figcaption>walk</figcaption><div class="scroll"><img class="px" src="media/cast/sir-stacks-walk-strip.png" width="2084" height="200" loading="lazy" alt="walk strip with per-frame counts"></div></figure><figure class="strip"><figcaption>run</figcaption><div class="scroll"><img class="px" src="media/cast/sir-stacks-run-strip.png" width="2084" height="200" loading="lazy" alt="run strip with per-frame counts"></div></figure><figure class="strip"><figcaption>fall</figcaption><div class="scroll"><img class="px" src="media/cast/sir-stacks-fall-strip.png" width="1044" height="200" loading="lazy" alt="fall strip with per-frame counts"></div></figure><figure class="strip"><figcaption>glint</figcaption><div class="scroll"><img class="px" src="media/cast/sir-stacks-glint-strip.png" width="1044" height="200" loading="lazy" alt="glint strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>35 (26 pixel, 9 groups)</dd></div>
+    <div><dt>Frames</dt><dd>28</dd></div>
+    <div><dt>Palette</dt><dd>22 entries in 8 ramps</dd></div>
+    <div><dt>Hidden overlap</dt><dd>418 px</dd></div>
+    <div><dt>Frame clean-up</dt><dd>idle 1 + 1, walk 5 + 10, run 14 + 23, fall 13 + 15 (fills + removals)</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands in all 9 hide states (S0&ndash;S6, S0+Glint, run-boxers) on all 28 frames</dd></div>
+    <div><dt>Rest vs design</dt><dd>0 px</dd></div>
+    <div><dt>Agent wall time</dt><dd>still 18 min; overlap pass 67 min; motion 38 min</dd></div>
+    <div><dt>Editor RSS peak</dt><dd>4.25 GB (motion); 7.11 GB in the first motion pass, which was stopped</dd></div>
+  </dl>
+</article>
+<article class="char" id="cast-pip">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#206871">PIP / CAPTAIN PALETTE</h3>
+    <p class="mono muted"><code>Cast/Pip.pas</code> &middot; 128 &times; 96 Indexed &middot; in 1-2 PALETTES, ALL CLEAR</p>
+  </header>
+  <p class="char-note">One sprite, five palettes. The Hero palette changes only the ink, scarf, hoodie, trousers, emblem and mask; the emblem entries cycle.</p>
+  <ol class="build" aria-label="From design to rest frame">
+    <li><figure><img src="media/cast/pip-design.png" width="192" height="192" loading="lazy" alt="The Krea 2 design"><figcaption><b>Design</b> Krea 2 picture, 64 &times; 64 cells of 16 px</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/pip-grid6.png" width="192" height="192" loading="lazy" alt="The design on its grid"><figcaption><b>Grid</b> one colour per cell, x3</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/pip-ref.png" width="256" height="192" loading="lazy" alt="The design reference"><figcaption><b>Reference</b> the imported design, x2</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/pip-rest.png" width="256" height="192" loading="lazy" alt="The finished rest frame"><figcaption><b>Rest frame</b> the layered sprite, x2 <span class="ok">0 px</span></figcaption></figure></li>
+  </ol>
+  <div class="char-grid">
+    <figure class="pieces"><div class="scroll"><img class="px" src="media/cast/pip-pieces.png" loading="lazy" alt="The pieces of Pip / Captain Palette"></div><figcaption>The pieces sheet from the build.</figcaption></figure>
+    <div class="tree"><p class="eyebrow">Layer tree, front first (16)</p><ul><li class="grp">NearArm<ul><li class="lyr">NearForearm</li><li class="lyr">NearUpperArm</li></ul></li><li class="lyr">Scarf</li><li class="lyr">Head</li><li class="lyr">Bag</li><li class="lyr">Body</li><li class="grp">FarArm<ul><li class="lyr">FarForearm</li><li class="lyr">FarUpperArm</li></ul></li><li class="grp">NearLeg<ul><li class="lyr">NearThigh</li><li class="lyr">NearShin</li></ul></li><li class="grp">FarLeg<ul><li class="lyr">FarThigh</li><li class="lyr">FarShin</li></ul></li></ul></div>
+  </div>
+  <figure class="wide"><div class="scroll"><img class="px" src="media/cast/pip-palettes.png" loading="lazy" alt="Pip in the five carrier palettes"></div><figcaption>The five carrier palettes on the same pixels (x4).</figcaption></figure>
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/pip-rest.png">
+<img class="px" src="media/cast/pip-idle.gif" width="256" height="192" loading="lazy" alt="idle tag"></picture>
+<figcaption><b>idle</b> <span class="mono">frames 0&ndash;3 &middot; 4 f &middot; 200 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/pip-rest.png">
+<img class="px" src="media/cast/pip-nervous.gif" width="256" height="192" loading="lazy" alt="nervous tag"></picture>
+<figcaption><b>nervous</b> <span class="mono">frames 4&ndash;7 &middot; 4 f &middot; 100 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/pip-rest.png">
+<img class="px" src="media/cast/pip-spin.gif" width="256" height="192" loading="lazy" alt="spin tag"></picture>
+<figcaption><b>spin</b> <span class="mono">frames 8&ndash;13 &middot; 6 f &middot; 150 150 150 150 200 200 ms &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/pip-rest.png">
+<img class="px" src="media/cast/pip-pose.gif" width="256" height="192" loading="lazy" alt="pose tag"></picture>
+<figcaption><b>pose</b> <span class="mono">frames 14&ndash;19 &middot; 6 f &middot; 250 ms each &middot; loops</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame pinhole and island counts</summary><figure class="strip"><figcaption>idle</figcaption><div class="scroll"><img class="px" src="media/cast/pip-idle-strip.png" width="1044" height="200" loading="lazy" alt="idle strip with per-frame counts"></div></figure><figure class="strip"><figcaption>nervous</figcaption><div class="scroll"><img class="px" src="media/cast/pip-nervous-strip.png" width="1044" height="200" loading="lazy" alt="nervous strip with per-frame counts"></div></figure><figure class="strip"><figcaption>spin</figcaption><div class="scroll"><img class="px" src="media/cast/pip-spin-strip.png" width="1564" height="200" loading="lazy" alt="spin strip with per-frame counts"></div></figure><figure class="strip"><figcaption>pose</figcaption><div class="scroll"><img class="px" src="media/cast/pip-pose-strip.png" width="1564" height="200" loading="lazy" alt="pose strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>16 (12 pixel, 4 groups)</dd></div>
+    <div><dt>Frames</dt><dd>20</dd></div>
+    <div><dt>Palette</dt><dd>21 entries in 9 ramps; 5 carrier palettes (Civilian, Goth, Banana, Festive, Hero)</dd></div>
+    <div><dt>Hidden overlap</dt><dd>908 px</dd></div>
+    <div><dt>Frame clean-up</dt><dd>17 px (nervous 5, spin 2, pose 10)</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands on every frame</dd></div>
+    <div><dt>Rest vs design</dt><dd>0 px</dd></div>
+    <div><dt>Agent wall time</dt><dd>still 25 min; motion 14 min</dd></div>
+    <div><dt>Editor RSS peak</dt><dd>2.21 GB</dd></div>
+  </dl>
+</article>
+<article class="char" id="cast-glob">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#265C39">GLOB</h3>
+    <p class="mono muted"><code>Cast/Glob.pas</code> &middot; 128 &times; 96 Indexed &middot; in 1-2 PALETTES, ALL CLEAR</p>
+  </header>
+  <p class="char-note">Squash and stretch on a bounce of 6 frames. The pink swap at the end of Scene 2 is the same pixels with another palette.</p>
+  <ol class="build" aria-label="From design to rest frame">
+    <li><figure><img src="media/cast/glob-design.png" width="192" height="192" loading="lazy" alt="The Krea 2 design"><figcaption><b>Design</b> Krea 2 picture, 64 &times; 64 cells of 16 px</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/glob-grid6.png" width="192" height="192" loading="lazy" alt="The design on its grid"><figcaption><b>Grid</b> one colour per cell, x3</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/glob-ref.png" width="256" height="192" loading="lazy" alt="The design reference"><figcaption><b>Reference</b> the imported design, x2</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/glob-rest.png" width="256" height="192" loading="lazy" alt="The finished rest frame"><figcaption><b>Rest frame</b> the layered sprite, x2 <span class="ok">0 px</span></figcaption></figure></li>
+  </ol>
+  <div class="char-grid">
+    <figure class="pieces"><div class="scroll"><img class="px" src="media/cast/glob-pieces.png" loading="lazy" alt="The pieces of Glob"></div><figcaption>5 pieces, cropped, at x2: Blush, Body, Drip, Eyes, Mouth.</figcaption></figure>
+    <div class="tree"><p class="eyebrow">Layer tree, front first (5)</p><ul><li class="lyr">Blush</li><li class="lyr">Eyes</li><li class="lyr">Mouth</li><li class="lyr">Body</li><li class="lyr">Drip</li></ul></div>
+  </div>
+  <figure class="wide"><div class="scroll"><img class="px" src="media/cast/glob-palettes.png" loading="lazy" alt="Glob in green and pink"></div><figcaption>Base, GlobGreen and GlobPink on the same pixels (x6).</figcaption></figure>
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/glob-rest.png">
+<img class="px" src="media/cast/glob-bounce.gif" width="256" height="192" loading="lazy" alt="bounce tag"></picture>
+<figcaption><b>bounce</b> <span class="mono">frames 0&ndash;5 &middot; 6 f &middot; 100 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/glob-rest.png">
+<img class="px" src="media/cast/glob-talk.gif" width="256" height="192" loading="lazy" alt="talk tag"></picture>
+<figcaption><b>talk</b> <span class="mono">frames 6&ndash;7 &middot; 2 f &middot; 150 ms each &middot; loops</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame pinhole and island counts</summary><figure class="strip"><figcaption>bounce</figcaption><div class="scroll"><img class="px" src="media/cast/glob-bounce-strip.png" width="1564" height="200" loading="lazy" alt="bounce strip with per-frame counts"></div></figure><figure class="strip"><figcaption>talk</figcaption><div class="scroll"><img class="px" src="media/cast/glob-talk-strip.png" width="524" height="200" loading="lazy" alt="talk strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>5 (Drip, Body, Mouth, Eyes, Blush)</dd></div>
+    <div><dt>Frames</dt><dd>8</dd></div>
+    <div><dt>Palette</dt><dd>GlobGreen and GlobPink carriers</dd></div>
+    <div><dt>Hidden overlap</dt><dd>262 px (rig.json)</dd></div>
+    <div><dt>Frame clean-up</dt><dd>0 px</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands on every frame, with and without Blush</dd></div>
+    <div><dt>Rest vs design</dt><dd>0 px</dd></div>
+    <div><dt>Agent wall time</dt><dd>about 14 min, still and motion</dd></div>
+    <div><dt>Editor RSS peak</dt><dd>about 4.3 GB</dd></div>
+  </dl>
+</article>
+<article class="char" id="cast-brash">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#702C7E">BRASH</h3>
+    <p class="mono muted"><code>Cast/Brash.pas</code> &middot; 128 &times; 96 Indexed &middot; in 1-3 ANIMATION + TILES, ALL CLEAR, CONTINUE?</p>
+  </header>
+  <p class="char-note">KO Grey is a Hue/Saturation adjustment layer at -100. Every KO frame holds only ink and the six greys.</p>
+  <ol class="build" aria-label="From design to rest frame">
+    <li><figure><img src="media/cast/brash-design.png" width="192" height="192" loading="lazy" alt="The Krea 2 design"><figcaption><b>Design</b> Krea 2 picture, 64 &times; 64 cells of 16 px</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/brash-grid6.png" width="192" height="192" loading="lazy" alt="The design on its grid"><figcaption><b>Grid</b> one colour per cell, x3</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/brash-ref.png" width="256" height="192" loading="lazy" alt="The design reference"><figcaption><b>Reference</b> the imported design, x2</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/brash-rest.png" width="256" height="192" loading="lazy" alt="The finished rest frame"><figcaption><b>Rest frame</b> the layered sprite, x2 <span class="ok">0 px</span></figcaption></figure></li>
+  </ol>
+  <div class="char-grid">
+    <figure class="pieces"><div class="scroll"><img class="px" src="media/cast/brash-pieces.png" loading="lazy" alt="The pieces of Brash"></div><figcaption>The pieces sheet from the build.</figcaption></figure>
+    <div class="tree"><p class="eyebrow">Layer tree, front first (21)</p><ul><li class="lyr">KO Grey (adjustment, hidden)</li><li class="grp">NearArm<ul><li class="lyr">NearUpperArm</li><li class="grp">NearElbow<ul><li class="lyr">NearForearm</li></ul></li></ul></li><li class="lyr">Belt</li><li class="lyr">Head</li><li class="lyr">Torso</li><li class="grp">FarArm<ul><li class="lyr">FarUpperArm</li><li class="grp">FarElbow<ul><li class="lyr">FarForearm</li></ul></li></ul></li><li class="grp">NearLeg<ul><li class="lyr">NearThigh</li><li class="grp">NearKnee<ul><li class="lyr">NearShin</li></ul></li></ul></li><li class="grp">FarLeg<ul><li class="lyr">FarThigh</li><li class="grp">FarKnee<ul><li class="lyr">FarShin</li></ul></li></ul></li><li class="lyr">Tails</li></ul></div>
+  </div>
+  <figure class="tag"><img class="px" src="media/cast/brash-ko-grey.gif" width="256" height="192" loading="lazy" alt="The ko tag with KO Grey shown"><figcaption><b>ko + KO Grey</b> <span class="mono">the same 6 frames with the adjustment layer shown</span></figcaption></figure>
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/brash-rest.png">
+<img class="px" src="media/cast/brash-idle.gif" width="256" height="192" loading="lazy" alt="idle tag"></picture>
+<figcaption><b>idle</b> <span class="mono">frames 0&ndash;5 &middot; 6 f &middot; 150 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/brash-rest.png">
+<img class="px" src="media/cast/brash-dash.gif" width="256" height="192" loading="lazy" alt="dash tag"></picture>
+<figcaption><b>dash</b> <span class="mono">frames 6&ndash;9 &middot; 4 f &middot; 150 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/brash-rest.png">
+<img class="px" src="media/cast/brash-combo.gif" width="256" height="192" loading="lazy" alt="combo tag"></picture>
+<figcaption><b>combo</b> <span class="mono">frames 10&ndash;18 &middot; 9 f &middot; 200 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/brash-rest.png">
+<img class="px" src="media/cast/brash-hurt.gif" width="256" height="192" loading="lazy" alt="hurt tag"></picture>
+<figcaption><b>hurt</b> <span class="mono">frames 19&ndash;20 &middot; 2 f &middot; 100 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/brash-rest.png">
+<img class="px" src="media/cast/brash-ko.gif" width="256" height="192" loading="lazy" alt="ko tag"></picture>
+<figcaption><b>ko</b> <span class="mono">frames 21&ndash;26 &middot; 6 f &middot; 150 150 150 150 200 200 ms &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/brash-rest.png">
+<img class="px" src="media/cast/brash-rise.gif" width="256" height="192" loading="lazy" alt="rise tag"></picture>
+<figcaption><b>rise</b> <span class="mono">frames 21&ndash;26 &middot; 6 f &middot; 200 200 150 150 150 150 ms &middot; once, reversed</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame pinhole and island counts</summary><figure class="strip"><figcaption>idle</figcaption><div class="scroll"><img class="px" src="media/cast/brash-idle-strip.png" width="1564" height="200" loading="lazy" alt="idle strip with per-frame counts"></div></figure><figure class="strip"><figcaption>dash</figcaption><div class="scroll"><img class="px" src="media/cast/brash-dash-strip.png" width="1044" height="200" loading="lazy" alt="dash strip with per-frame counts"></div></figure><figure class="strip"><figcaption>combo</figcaption><div class="scroll"><img class="px" src="media/cast/brash-combo-strip.png" width="2344" height="200" loading="lazy" alt="combo strip with per-frame counts"></div></figure><figure class="strip"><figcaption>hurt</figcaption><div class="scroll"><img class="px" src="media/cast/brash-hurt-strip.png" width="524" height="200" loading="lazy" alt="hurt strip with per-frame counts"></div></figure><figure class="strip"><figcaption>ko</figcaption><div class="scroll"><img class="px" src="media/cast/brash-ko-strip.png" width="1564" height="200" loading="lazy" alt="ko strip with per-frame counts"></div></figure><figure class="strip"><figcaption>rise</figcaption><div class="scroll"><img class="px" src="media/cast/brash-rise-strip.png" width="1564" height="200" loading="lazy" alt="rise strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>21 (12 pixel, 8 groups, KO Grey adjustment)</dd></div>
+    <div><dt>Frames</dt><dd>27</dd></div>
+    <div><dt>Palette</dt><dd>24 entries in 8 ramps (a 6-step grey ramp for the KO)</dd></div>
+    <div><dt>Hidden overlap</dt><dd>693 px</dd></div>
+    <div><dt>Frame clean-up</dt><dd>32 pocket + 7 stray px over 26 frames, at most 6 a frame</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands on all 27 frames, default and KO Grey</dd></div>
+    <div><dt>Rest vs design</dt><dd>0 px</dd></div>
+    <div><dt>Agent wall time</dt><dd>still 31 min; motion 23 min</dd></div>
+    <div><dt>Editor RSS peak</dt><dd>3.02 GB</dd></div>
+  </dl>
+</article>
+<article class="char" id="cast-bonk">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#465624">BONK</h3>
+    <p class="mono muted"><code>Cast/Bonk.pas</code> &middot; 128 &times; 96 (a 60 &times; 60 design) Indexed &middot; in 1-3 ANIMATION + TILES, ALL CLEAR, CONTINUE?</p>
+  </header>
+  <p class="char-note">The moss is a clipped layer over the torso, 17 islands at rest. The counter reaches 24 px.</p>
+  <ol class="build" aria-label="From design to rest frame">
+    <li><figure><img src="media/cast/bonk-design.png" width="192" height="192" loading="lazy" alt="The Krea 2 design"><figcaption><b>Design</b> Krea 2 picture, 64 &times; 64 cells of 16 px</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/bonk-grid6.png" width="192" height="192" loading="lazy" alt="The design on its grid"><figcaption><b>Grid</b> one colour per cell, x3</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/bonk-ref.png" width="256" height="192" loading="lazy" alt="The design reference"><figcaption><b>Reference</b> the imported design, x2</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/bonk-rest.png" width="256" height="192" loading="lazy" alt="The finished rest frame"><figcaption><b>Rest frame</b> the layered sprite, x2 <span class="ok">0 px</span></figcaption></figure></li>
+  </ol>
+  <div class="char-grid">
+    <figure class="pieces"><div class="scroll"><img class="px" src="media/cast/bonk-pieces.png" loading="lazy" alt="The pieces of Bonk"></div><figcaption>The pieces sheet from the build.</figcaption></figure>
+    <div class="tree"><p class="eyebrow">Layer tree, front first (15)</p><ul><li class="grp">HeadGroup<ul><li class="lyr">Eyes</li><li class="lyr">Jaw</li><li class="lyr">Head</li></ul></li><li class="grp">NearArm<ul><li class="lyr">NearUpperArm</li><li class="grp">NearElbow<ul><li class="lyr">NearForearm</li></ul></li></ul></li><li class="lyr">Moss</li><li class="lyr">Torso</li><li class="grp">FarArm<ul><li class="lyr">FarUpperArm</li><li class="grp">FarElbow<ul><li class="lyr">FarForearm</li></ul></li></ul></li><li class="lyr">Legs</li></ul></div>
+  </div>
+  
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/bonk-rest.png">
+<img class="px" src="media/cast/bonk-idle.gif" width="256" height="192" loading="lazy" alt="idle tag"></picture>
+<figcaption><b>idle</b> <span class="mono">frames 0&ndash;3 &middot; 4 f &middot; 200 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/bonk-rest.png">
+<img class="px" src="media/cast/bonk-block.gif" width="256" height="192" loading="lazy" alt="block tag"></picture>
+<figcaption><b>block</b> <span class="mono">frames 4&ndash;6 &middot; 3 f &middot; 200 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/bonk-rest.png">
+<img class="px" src="media/cast/bonk-counter.gif" width="256" height="192" loading="lazy" alt="counter tag"></picture>
+<figcaption><b>counter</b> <span class="mono">frames 7&ndash;12 &middot; 6 f &middot; 150 150 150 150 200 200 ms &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/bonk-rest.png">
+<img class="px" src="media/cast/bonk-talk.gif" width="256" height="192" loading="lazy" alt="talk tag"></picture>
+<figcaption><b>talk</b> <span class="mono">frames 13&ndash;14 &middot; 2 f &middot; 150 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/bonk-rest.png">
+<img class="px" src="media/cast/bonk-shrug.gif" width="256" height="192" loading="lazy" alt="shrug tag"></picture>
+<figcaption><b>shrug</b> <span class="mono">frames 15&ndash;18 &middot; 4 f &middot; 150 150 300 300 ms &middot; once</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame pinhole and island counts</summary><figure class="strip"><figcaption>idle</figcaption><div class="scroll"><img class="px" src="media/cast/bonk-idle-strip.png" width="1044" height="200" loading="lazy" alt="idle strip with per-frame counts"></div></figure><figure class="strip"><figcaption>block</figcaption><div class="scroll"><img class="px" src="media/cast/bonk-block-strip.png" width="784" height="200" loading="lazy" alt="block strip with per-frame counts"></div></figure><figure class="strip"><figcaption>counter</figcaption><div class="scroll"><img class="px" src="media/cast/bonk-counter-strip.png" width="1564" height="200" loading="lazy" alt="counter strip with per-frame counts"></div></figure><figure class="strip"><figcaption>talk</figcaption><div class="scroll"><img class="px" src="media/cast/bonk-talk-strip.png" width="524" height="200" loading="lazy" alt="talk strip with per-frame counts"></div></figure><figure class="strip"><figcaption>shrug</figcaption><div class="scroll"><img class="px" src="media/cast/bonk-shrug-strip.png" width="1044" height="200" loading="lazy" alt="shrug strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>15 (10 pixel, 5 groups)</dd></div>
+    <div><dt>Frames</dt><dd>19</dd></div>
+    <div><dt>Palette</dt><dd>16 entries in 5 ramps; amber eyes are emissive</dd></div>
+    <div><dt>Hidden overlap</dt><dd>1,483 px</dd></div>
+    <div><dt>Frame clean-up</dt><dd>6 px</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands in S0, moss-hidden and eyes-hidden on every frame</dd></div>
+    <div><dt>Rest vs design</dt><dd>0 px</dd></div>
+    <div><dt>Agent wall time</dt><dd>still 37 min; motion 14 min</dd></div>
+    <div><dt>Editor RSS peak</dt><dd>1.95 GB (still)</dd></div>
+  </dl>
+</article>
+<article class="char" id="cast-mira">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#6F2546">MIRA</h3>
+    <p class="mono muted"><code>Cast/Mira.pas</code> &middot; 128 &times; 96 Indexed &middot; in PRESS START, 1-4 DRAWING TOOLS, ALL CLEAR, CONTINUE?</p>
+  </header>
+  <p class="char-note">Her pencil doubles as the trailer's mouse cursor: the Cursor layer is a 14-row copy of the tip with its hotspot at (73, 87).</p>
+  <ol class="build" aria-label="From design to rest frame">
+    <li><figure><img src="media/cast/mira-design.png" width="192" height="192" loading="lazy" alt="The Krea 2 design"><figcaption><b>Design</b> Krea 2 picture, 64 &times; 64 cells of 16 px</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/mira-grid6.png" width="192" height="192" loading="lazy" alt="The design on its grid"><figcaption><b>Grid</b> one colour per cell, x3</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/mira-ref.png" width="256" height="192" loading="lazy" alt="The design reference"><figcaption><b>Reference</b> the imported design, x2</figcaption></figure></li>
+    <li><figure><img class="px" src="media/cast/mira-rest.png" width="256" height="192" loading="lazy" alt="The finished rest frame"><figcaption><b>Rest frame</b> the layered sprite, x2 <span class="ok">0 px</span></figcaption></figure></li>
+  </ol>
+  <div class="char-grid">
+    <figure class="pieces"><div class="scroll"><img class="px" src="media/cast/mira-pieces.png" loading="lazy" alt="The pieces of Mira"></div><figcaption>The pieces sheet from the build.</figcaption></figure>
+    <div class="tree"><p class="eyebrow">Layer tree, front first (12)</p><ul><li class="lyr">Cursor (hidden)</li><li class="grp">NearArm<ul><li class="lyr">NearFingers</li><li class="lyr">NearHand</li><li class="lyr">NearSleeve</li></ul></li><li class="lyr">Pencil</li><li class="grp">FarArm<ul><li class="lyr">FarUpperArm</li><li class="lyr">FarForearm</li></ul></li><li class="lyr">Head</li><li class="lyr">Body</li><li class="lyr">Legs</li></ul></div>
+  </div>
+  
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/mira-rest.png">
+<img class="px" src="media/cast/mira-idle.gif" width="256" height="192" loading="lazy" alt="idle tag"></picture>
+<figcaption><b>idle</b> <span class="mono">frames 0&ndash;3 &middot; 4 f &middot; 200 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/mira-rest.png">
+<img class="px" src="media/cast/mira-draw.gif" width="256" height="192" loading="lazy" alt="draw tag"></picture>
+<figcaption><b>draw</b> <span class="mono">frames 4&ndash;9 &middot; 6 f &middot; 100 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/mira-rest.png">
+<img class="px" src="media/cast/mira-stamp.gif" width="256" height="192" loading="lazy" alt="stamp tag"></picture>
+<figcaption><b>stamp</b> <span class="mono">frames 10&ndash;12 &middot; 3 f &middot; 150 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/mira-rest.png">
+<img class="px" src="media/cast/mira-point.gif" width="256" height="192" loading="lazy" alt="point tag"></picture>
+<figcaption><b>point</b> <span class="mono">frames 13&ndash;14 &middot; 2 f &middot; 200 ms each &middot; loops</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/mira-rest.png">
+<img class="px" src="media/cast/mira-cursor.gif" width="256" height="192" loading="lazy" alt="cursor tag"></picture>
+<figcaption><b>cursor</b> <span class="mono">frames 15&ndash;15 &middot; 1 f &middot; 100 ms each &middot; once</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame pinhole and island counts</summary><figure class="strip"><figcaption>idle</figcaption><div class="scroll"><img class="px" src="media/cast/mira-idle-strip.png" width="1044" height="200" loading="lazy" alt="idle strip with per-frame counts"></div></figure><figure class="strip"><figcaption>draw</figcaption><div class="scroll"><img class="px" src="media/cast/mira-draw-strip.png" width="1564" height="200" loading="lazy" alt="draw strip with per-frame counts"></div></figure><figure class="strip"><figcaption>stamp</figcaption><div class="scroll"><img class="px" src="media/cast/mira-stamp-strip.png" width="784" height="200" loading="lazy" alt="stamp strip with per-frame counts"></div></figure><figure class="strip"><figcaption>point</figcaption><div class="scroll"><img class="px" src="media/cast/mira-point-strip.png" width="524" height="200" loading="lazy" alt="point strip with per-frame counts"></div></figure><figure class="strip"><figcaption>cursor</figcaption><div class="scroll"><img class="px" src="media/cast/mira-cursor-strip.png" width="264" height="200" loading="lazy" alt="cursor strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>12 (10 pixel, 2 groups)</dd></div>
+    <div><dt>Frames</dt><dd>16</dd></div>
+    <div><dt>Palette</dt><dd>26 entries in 13 ramps, built from the raw design's cell histogram</dd></div>
+    <div><dt>Hidden overlap</dt><dd>550 px</dd></div>
+    <div><dt>Frame clean-up</dt><dd>6 px</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands in S0, S0 + Cursor and the cursor alone on every frame</dd></div>
+    <div><dt>Rest vs design</dt><dd>0 px</dd></div>
+    <div><dt>Agent wall time</dt><dd>still 22 min; motion 10 min</dd></div>
+    <div><dt>Editor RSS peak</dt><dd>about 2 GB</dd></div>
+  </dl>
+</article>
+<article class="char" id="cast-doodle">
+  <header class="char-head">
+    <h3 class="plate plate-lg" style="--p:#4A4A55">DOODLE</h3>
+    <p class="mono muted"><code>Cast/Doodle.pas</code> &middot; 64 &times; 48 Indexed &middot; in 1-4 DRAWING TOOLS, ALL CLEAR</p>
+  </header>
+  <p class="char-note">Doodle has no Krea design. He was drawn in the plugin as a pencil sketch (two layers, Body and Wing), and his blur and scramble frames are the Blur and Scramble tools themselves, driven stroke by stroke. Those tool frames are checked for pinholes only, because the tools make islands by design.</p>
+  <div class="tags"><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/doodle-rest.png">
+<img class="px" src="media/cast/doodle-rise.gif" width="192" height="144" loading="lazy" alt="rise tag"></picture>
+<figcaption><b>rise</b> <span class="mono">frames 0&ndash;3 &middot; 4 f &middot; 150 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/doodle-rest.png">
+<img class="px" src="media/cast/doodle-blur.gif" width="256" height="192" loading="lazy" alt="blur tag"></picture>
+<figcaption><b>blur</b> <span class="mono">frames 4&ndash;6 &middot; 3 f &middot; 330 ms each &middot; once</span></figcaption></figure><figure class="tag"><picture><source media="(prefers-reduced-motion: reduce)" srcset="media/cast/doodle-rest.png">
+<img class="px" src="media/cast/doodle-scramble.gif" width="256" height="192" loading="lazy" alt="scramble tag"></picture>
+<figcaption><b>scramble</b> <span class="mono">frames 7&ndash;11 &middot; 5 f &middot; 200 ms each &middot; once</span></figcaption></figure></div>
+  <details class="strips"><summary>Strips with per-frame counts</summary><figure class="strip"><figcaption>rise</figcaption><div class="scroll"><img class="px" src="media/cast/doodle-rise-strip.png" width="783" height="150" loading="lazy" alt="rise strip with per-frame counts"></div></figure><figure class="strip"><figcaption>blur</figcaption><div class="scroll"><img class="px" src="media/cast/doodle-blur-strip.png" width="800" height="208" loading="lazy" alt="blur strip with per-frame counts"></div></figure><figure class="strip"><figcaption>scramble</figcaption><div class="scroll"><img class="px" src="media/cast/doodle-scramble-strip.png" width="1328" height="208" loading="lazy" alt="scramble strip with per-frame counts"></div></figure></details>
+  <dl class="numbers">
+    <div><dt>Layers</dt><dd>2 (Body, Wing)</dd></div>
+    <div><dt>Frames</dt><dd>12 (rise 0&ndash;3, blur 4&ndash;6, scramble 7&ndash;11)</dd></div>
+    <div><dt>Frame clean-up</dt><dd>3 px</dd></div>
+    <div><dt>Tears</dt><dd>0 pinholes, 0 islands on every rise frame</dd></div>
+  </dl>
+</article>
+</section>
+
+<section id="world" aria-labelledby="h-world">
+  <div class="sec-head">
+    <h2 id="h-world" class="levelcard">The world</h2>
+    <p>Five stages on 16 px tiles. The first versions read as plain tilemaps, so each stage was redrawn to game-quality detail, with real games as references. Drag across each picture to compare the first version with the final one.</p>
+  </div>
+  
+<article class="stage" id="stage-overworld">
+  <header class="stage-head"><h3>Overworld</h3><p class="mono muted"><code>Stages/Overworld.pas + OverworldStarred.pas</code> &middot; Intro; the outro uses the starred copy</p></header>
+  <div class="compare" style="--pos:50%">
+    <img class="px" src="media/world/overworld-v2.png" width="960" height="544" loading="lazy" alt="Overworld, version 2">
+    <img class="px before" src="media/world/overworld-v1.png" width="960" height="544" loading="lazy" alt="Overworld, first version">
+    <span class="tagv v1" aria-hidden="true">FIRST</span><span class="tagv v2" aria-hidden="true">FINAL</span>
+    <label class="sr" for="cmp-overworld">Compare the first and final versions of the Overworld</label>
+    <input class="cmp" id="cmp-overworld" type="range" min="0" max="100" value="50">
+  </div>
+  <div class="stage-grid">
+    <div class="refs"><p class="eyebrow">Real-game references</p><ul><li>Super Mario World (the overworld map)</li><li>Zelda: A Link to the Past (the Light World)</li><li>Pokemon Emerald routes</li><li>Shovel Knight&#x27;s map</li></ul></div>
+    <div><p class="eyebrow">Final version &middot; 18 min of agent time</p><p>398 tiles, 55 colours in 11 ramps. Forest wall, waterfall and lake with a dock, cottage plateau, standing stones, south cliff, stone node discs; the path ends at the castle gate. Edge contrast went up for every character (Doodle 1.96 to 2.25, still the weakest).</p></div>
+  </div>
+  <figure><img class="px" src="media/world/overworld-starred.png" width="960" height="544" loading="lazy" alt="The starred Overworld"><figcaption>OverworldStarred.pas, the copy the outro uses: the four node cells on gold-star discs, with node glows in the Light layer.</figcaption></figure>
+  <details><summary>Tileset: 256 &times; 400 px of 16 px tiles, shown x2</summary><div class="scroll"><img class="px" src="media/world/overworld-tiles.png" width="512" height="800" loading="lazy" alt="Overworld tileset"></div></details>
+</article>
+<article class="stage" id="stage-courtyard">
+  <header class="stage-head"><h3>Courtyard</h3><p class="mono muted"><code>Stages/Courtyard.pas</code> &middot; 1-1 LAYERS</p></header>
+  <div class="compare" style="--pos:50%">
+    <img class="px" src="media/world/courtyard-v2.png" width="960" height="544" loading="lazy" alt="Courtyard, version 2">
+    <img class="px before" src="media/world/courtyard-v1.png" width="960" height="544" loading="lazy" alt="Courtyard, first version">
+    <span class="tagv v1" aria-hidden="true">FIRST</span><span class="tagv v2" aria-hidden="true">FINAL</span>
+    <label class="sr" for="cmp-courtyard">Compare the first and final versions of the Courtyard</label>
+    <input class="cmp" id="cmp-courtyard" type="range" min="0" max="100" value="50">
+  </div>
+  <div class="stage-grid">
+    <div class="refs"><p class="eyebrow">Real-game references</p><ul><li>Castlevania: Symphony of the Night (the castle entrance and the outer wall)</li><li>Castlevania: Rondo of Blood</li><li>Shovel Knight (Pridemoor Keep)</li></ul></div>
+    <div><p class="eyebrow">Final version &middot; 21 min of agent time</p><p>218 tiles, 45 colours. Far castle, hills and clouds, battlements, 11 brick variants, banners, ivy, a window, sconces, flagstones, a broken ledge and the pit. Sir Stacks&#x27; edge contrast 1.02 to 1.61; background noise 0.045 to 0.011.</p></div>
+  </div>
+  
+  <details><summary>Tileset: 256 &times; 224 px of 16 px tiles, shown x2</summary><div class="scroll"><img class="px" src="media/world/courtyard-tiles.png" width="512" height="448" loading="lazy" alt="Courtyard tileset"></div></details>
+</article>
+<article class="stage" id="stage-rooftop">
+  <header class="stage-head"><h3>Rooftop</h3><p class="mono muted"><code>Stages/Rooftop.pas</code> &middot; 1-2 PALETTES</p></header>
+  <div class="compare" style="--pos:50%">
+    <img class="px" src="media/world/rooftop-v2.png" width="960" height="544" loading="lazy" alt="Rooftop, version 2">
+    <img class="px before" src="media/world/rooftop-v1.png" width="960" height="544" loading="lazy" alt="Rooftop, first version">
+    <span class="tagv v1" aria-hidden="true">FIRST</span><span class="tagv v2" aria-hidden="true">FINAL</span>
+    <label class="sr" for="cmp-rooftop">Compare the first and final versions of the Rooftop</label>
+    <input class="cmp" id="cmp-rooftop" type="range" min="0" max="100" value="50">
+  </div>
+  <div class="stage-grid">
+    <div class="refs"><p class="eyebrow">Real-game references</p><ul><li>Katana Zero (dusk city rooftops, neon)</li><li>Celeste (chapter 3, night-city colours)</li><li>Gunpoint (rooftop silhouettes)</li><li>Mega Man X (Highway Stage skyline)</li><li>Hotline Miami (palettes)</li></ul></div>
+    <div><p class="eyebrow">Final version &middot; 22 min of agent time</p><p>398 tiles, 63 colours in 13 ramps. Three skyline depths, a neon palette sign, a stair house and a puddle reflection. Edge contrast went up for all seven palette states; noise 0.0285 to 0.0129.</p></div>
+  </div>
+  
+  <details><summary>Tileset: 256 &times; 400 px of 16 px tiles, shown x2</summary><div class="scroll"><img class="px" src="media/world/rooftop-tiles.png" width="512" height="800" loading="lazy" alt="Rooftop tileset"></div></details>
+</article>
+<article class="stage" id="stage-arena">
+  <header class="stage-head"><h3>Arena</h3><p class="mono muted"><code>Stages/Arena.pas, ArenaBackdrop.pas, ArenaRows*.pas</code> &middot; 1-3 ANIMATION + TILES and the post-credit scene</p></header>
+  <div class="compare" style="--pos:50%">
+    <img class="px" src="media/world/arena-v2.png" width="960" height="544" loading="lazy" alt="Arena, version 2">
+    <img class="px before" src="media/world/arena-v1.png" width="960" height="544" loading="lazy" alt="Arena, first version">
+    <span class="tagv v1" aria-hidden="true">FIRST</span><span class="tagv v2" aria-hidden="true">FINAL</span>
+    <label class="sr" for="cmp-arena">Compare the first and final versions of the Arena</label>
+    <input class="cmp" id="cmp-arena" type="range" min="0" max="100" value="50">
+  </div>
+  <div class="stage-grid">
+    <div class="refs"><p class="eyebrow">Real-game references</p><ul><li>Street Fighter II (Ryu&#x27;s Suzaku Castle, Sagat&#x27;s Thailand temple)</li><li>Mortal Kombat II (The Pit II, Kombat Tomb)</li><li>Blasphemous (stonework, chains, candles)</li><li>Shovel Knight (tile variety)</li></ul></div>
+    <div><p class="eyebrow">Final version &middot; 45 min of agent time</p><p>88 tiles, 40 colours. A night gallery with a crowd, niches, a crest, chains, torch plates and a sandstone floor. Readability against the wall: Bonk 1.01 to 1.58, Brash 1.62 to 2.54; band noise 0.043 to 0.008.</p></div>
+  </div>
+  
+  <details><summary>Tileset: 256 &times; 128 px of 16 px tiles, shown x2</summary><div class="scroll"><img class="px" src="media/world/arena-tiles.png" width="512" height="256" loading="lazy" alt="Arena tileset"></div></details>
+</article>
+<article class="stage" id="stage-sketch">
+  <header class="stage-head"><h3>Sketch</h3><p class="mono muted"><code>Stages/Sketch.pas</code> &middot; 1-4 DRAWING TOOLS</p></header>
+  <div class="compare" style="--pos:50%">
+    <img class="px" src="media/world/sketch-v2.png" width="960" height="544" loading="lazy" alt="Sketch, version 2">
+    <img class="px before" src="media/world/sketch-v1.png" width="960" height="544" loading="lazy" alt="Sketch, first version">
+    <span class="tagv v1" aria-hidden="true">FIRST</span><span class="tagv v2" aria-hidden="true">FINAL</span>
+    <label class="sr" for="cmp-sketch">Compare the first and final versions of the Sketch</label>
+    <input class="cmp" id="cmp-sketch" type="range" min="0" max="100" value="50">
+  </div>
+  <div class="stage-grid">
+    <div class="refs"><p class="eyebrow">Real-game references</p><ul><li>Drawn to Life (the drawn world)</li><li>Paper Mario (the paper look)</li><li>Scribblenauts</li><li>notebook games like Doodle Jump (graph paper)</li></ul></div>
+    <div><p class="eyebrow">Final version &middot; 20 min of agent time</p><p>311 tiles. A sketchbook page: spiral binding, margin, header, doodles, a coffee ring, an eraser ghost, a cut-away of earth with a chest and a dragon skull, a hatched gap with spikes and a curled corner. The play band stays plain; noise 0.069 to 0.023.</p></div>
+  </div>
+  
+  <details><summary>Tileset: 256 &times; 320 px of 16 px tiles, shown x2</summary><div class="scroll"><img class="px" src="media/world/sketch-tiles.png" width="512" height="640" loading="lazy" alt="Sketch tileset"></div></details>
+</article>
+
+  <h3 class="subhead">The arena builds row by row</h3>
+  <p>Scene 3 opens on the backdrop, then five row-group documents slide in, wall first and floor last. Each is a 480-pixel-wide strip cut from the Arena's tile map with 0 px difference.</p>
+  <div class="rows">
+    <figure><figcaption>Backdrop</figcaption><img class="px" src="media/world/arena-backdrop.png" width="960" height="544" loading="lazy" alt="Arena backdrop at x2"></figure>
+    <figure><figcaption>Rows 04-06</figcaption><img class="px" src="media/world/arena-rows04-06.png" width="960" height="96" loading="lazy" alt="Arena rows 4 to 6"></figure>
+    <figure><figcaption>Rows 07-09</figcaption><img class="px" src="media/world/arena-rows07-09.png" width="960" height="96" loading="lazy" alt="Arena rows 7 to 9"></figure>
+    <figure><figcaption>Rows 10-12</figcaption><img class="px" src="media/world/arena-rows10-12.png" width="960" height="96" loading="lazy" alt="Arena rows 10 to 12"></figure>
+    <figure><figcaption>Rows 13-14</figcaption><img class="px" src="media/world/arena-rows13-14.png" width="960" height="64" loading="lazy" alt="Arena rows 13 and 14"></figure>
+    <figure><figcaption>Rows 15-16</figcaption><img class="px" src="media/world/arena-rows15-16.png" width="960" height="64" loading="lazy" alt="Arena rows 15 and 16"></figure>
+  </div>
+
+  <h3 class="subhead">Props</h3>
+  <div class="shelf">
+    <figure><img class="px" src="media/world/pillar-x4.png" width="96" height="448" loading="lazy" alt="Pillar"><figcaption>Pillar, x4</figcaption></figure>
+    <figure><img class="px" src="media/world/watertower-x4.png" width="256" height="384" loading="lazy" alt="Water tower"><figcaption>WaterTower, x4</figcaption></figure>
+    <figure><img class="px" src="media/world/castle-x4.png" width="384" height="384" loading="lazy" alt="Castle"><figcaption>Castle, x4</figcaption></figure>
+    <figure><img class="px" src="media/world/torch-burn.gif" width="64" height="128" loading="lazy" alt="Torch burning"><figcaption>Torch, burn</figcaption></figure>
+    <figure><img class="px" src="media/world/banner-sway.gif" width="96" height="256" loading="lazy" alt="Banner swaying"><figcaption>Banner, sway</figcaption></figure>
+    <figure><img class="px" src="media/world/nodepulse.gif" width="200" height="200" loading="lazy" alt="Node pulse"><figcaption>NodePulse, 3 frames at 150 ms</figcaption></figure>
+  </div>
+
+  <h3 class="subhead">Tool moments in Scene 4</h3>
+  <p>These props were drawn by the plugin's own drawing tools, driven stroke by stroke and saved as tags, so each frame of the tag is a state the tool really left behind.</p>
+  <div class="gallery">
+    <figure><img class="px" src="media/world/bridge-curve.gif" width="960" height="192" loading="lazy" alt="The bridge drawn with the Curve tool"><figcaption><b>Curve + pixel-perfect</b> Bridge, 4 frames at 300 ms (shown x2)</figcaption></figure>
+    <figure><img class="px" src="media/world/boulder-turn.gif" width="288" height="288" loading="lazy" alt="The boulder turned with Free Transform"><figcaption><b>Free Transform</b> Boulder, 5 frames at 300 ms, x6</figcaption></figure>
+    <figure><img class="px" src="media/world/flowers-stamp.gif" width="576" height="192" loading="lazy" alt="Flowers stamped with a custom brush"><figcaption><b>Custom brush</b> Flowers, 5 frames at 300 ms, x6</figcaption></figure>
+    <figure><img class="px" src="media/world/grass-pressure.gif" width="576" height="192" loading="lazy" alt="Grass drawn with pen pressure"><figcaption><b>Pen pressure</b> Grass, 4 frames (300, 300, 350, 350 ms), x6</figcaption></figure>
+    <figure><img class="px" src="media/world/sign-text.gif" width="384" height="384" loading="lazy" alt="Sign lettered with the Text tool"><figcaption><b>Text</b> Sign, 4 frames (400, 400, 450, 450 ms), x8</figcaption></figure>
+  </div>
+  <details><summary>The five tool strips, with per-frame counts</summary>
+    <div class="scroll"><img class="px" src="media/world/bridge-curve-strip.png" width="3860" height="200" loading="lazy" alt="Bridge curve strip" style="max-width:none"></div>
+    <div class="scroll"><img class="px" src="media/world/boulder-turn-strip.png" width="1512" height="312" loading="lazy" alt="Boulder turn strip" style="max-width:none"></div>
+    <div class="scroll"><img class="px" src="media/world/flowers-stamp-strip.png" width="2952" height="216" loading="lazy" alt="Flowers stamp strip" style="max-width:none"></div>
+    <div class="scroll"><img class="px" src="media/world/grass-pressure-strip.png" width="2364" height="216" loading="lazy" alt="Grass pressure strip" style="max-width:none"></div>
+    <div class="scroll"><img class="px" src="media/world/sign-text-strip.png" width="1616" height="416" loading="lazy" alt="Sign text strip" style="max-width:none"></div>
+  </details>
+
+  <h3 class="subhead">The UI kit, titles and logo</h3>
+  <p><code>UI/Kit.pas</code> is one 480 &times; 270 document: the level card, the dialogue box, eight name tags, a star and the iris. Every box and card on this page copies its colours. Text contrast: box 16.31:1, card 17.23:1, name tags 5.67:1 or more.</p>
+  <figure><img class="px" src="media/world/kit.png" width="960" height="540" loading="lazy" alt="UI kit, all layers, x2"><figcaption>UI/Kit.pas with every layer shown, x2.</figcaption></figure>
+  <div class="boxes" aria-label="The eight name tags on the dialogue box">
+    <img class="px" src="media/world/box-sirstacks.png" loading="lazy" alt="Sir Stacks tag">
+    <img class="px" src="media/world/box-pip.png" loading="lazy" alt="Pip tag">
+    <img class="px" src="media/world/box-captainpalette.png" loading="lazy" alt="Captain Palette tag">
+    <img class="px" src="media/world/box-glob.png" loading="lazy" alt="Glob tag">
+    <img class="px" src="media/world/box-brash.png" loading="lazy" alt="Brash tag">
+    <img class="px" src="media/world/box-bonk.png" loading="lazy" alt="Bonk tag">
+    <img class="px" src="media/world/box-mira.png" loading="lazy" alt="Mira tag">
+    <img class="px" src="media/world/box-doodle.png" loading="lazy" alt="Doodle tag">
+  </div>
+  <div class="gallery">
+    <figure style="background:#0b0b10"><img class="px" src="media/world/titles.png" width="960" height="540" loading="lazy" alt="Titles document: PRESS START and THE END? on the plate"><figcaption style="padding:0 10px 10px">UI/Titles.pas, all three layers, x2: the plate, PRESS START and THE END?</figcaption></figure>
+    <figure><img class="px" src="media/world/endcard.png" width="672" height="76" loading="lazy" alt="End card"><figcaption>UI/EndCard.pas, x2. Contrast 17.23:1.</figcaption></figure>
+    <figure><img class="px" src="media/world/logo-x4.png" width="384" height="384" loading="lazy" alt="Logo"><figcaption>UI/Logo.pas, x4: the logo, rendered by the plugin and compared with the reference render, 0 px different (96 &times; 96).</figcaption></figure>
+  </div>
+</section>
+
+<section id="made" aria-labelledby="h-made">
+  <div class="sec-head">
+    <h2 id="h-made" class="levelcard">How it was made</h2>
+    <p>Nine steps, in order. Steps 2 to 4 are agents working through the plugin's public surface; steps 5 to 8 are the trailer rig, which lives in its own Editor-only folder and never ships with the plugin.</p>
+  </div>
+  <div class="scroll">
+    <svg class="pipe" viewBox="0 0 960 420" role="img" aria-labelledby="pipe-t pipe-d" xmlns="http://www.w3.org/2000/svg">
+      <title id="pipe-t">The trailer pipeline</title>
+      <desc id="pipe-d">Design, agent verbs, .pas documents, beat script, bake, Unity scene, Recorder, FrameCheck, edit.</desc>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="head"/></marker></defs>
+      <g>
+        <rect class="node" x="10" y="10" width="270" height="104"/><text class="n" x="26" y="36">1</text><text class="t" x="48" y="37">DESIGN</text><text class="s" x="26" y="66">Krea 2 picture through ComfyUI</text><text class="s" x="26" y="90">64 &#215; 64 cells of 16 px</text>
+        <rect class="node" x="345" y="10" width="270" height="104"/><text class="n" x="361" y="36">2</text><text class="t" x="383" y="37">AGENT VERBS</text><text class="s" x="361" y="66">pas.* commands and queries</text><text class="s" x="361" y="90">54 verbs, 21,628 logged calls</text>
+        <rect class="node" x="680" y="10" width="270" height="104"/><text class="n" x="696" y="36">3</text><text class="t" x="718" y="37">.PAS DOCUMENTS</text><text class="s" x="696" y="66">Indexed, layered, tagged</text><text class="s" x="696" y="90">35 in the master script</text>
+        <rect class="node" x="680" y="158" width="270" height="104"/><text class="n" x="696" y="184">4</text><text class="t" x="718" y="185">BEAT SCRIPT</text><text class="s" x="696" y="214">8 scene files, one trailer.json</text><text class="s" x="696" y="238">314 beats, 63 audio slots</text>
+        <rect class="node" x="345" y="158" width="270" height="104"/><text class="n" x="361" y="184">5</text><text class="t" x="383" y="185">BAKE</text><text class="s" x="361" y="214">sprites rendered by the plugin</text><text class="s" x="361" y="238">297 sprites, tear gate</text>
+        <rect class="node" x="10" y="158" width="270" height="104"/><text class="n" x="26" y="184">6</text><text class="t" x="48" y="185">UNITY SCENE</text><text class="s" x="26" y="214">Y-sorted actors, 480 &#215; 270</text><text class="s" x="26" y="238">55 actors in 8 scenes</text>
+        <rect class="node" x="10" y="306" width="270" height="104"/><text class="n" x="26" y="332">7</text><text class="t" x="48" y="333">RECORDER</text><text class="s" x="26" y="362">native, x4 and x8 PNG, 60 fps</text><text class="s" x="26" y="386">5,220 frames each, 1.8 GB</text>
+        <rect class="node" x="345" y="306" width="270" height="104"/><text class="n" x="361" y="332">8</text><text class="t" x="383" y="333">FRAMECHECK</text><text class="s" x="361" y="362">frames rebuilt from fresh renders</text><text class="s" x="361" y="386">145 frames, 0 px different</text>
+        <rect class="node" x="680" y="306" width="270" height="104"/><text class="n" x="696" y="332">9</text><text class="t" x="718" y="333">EDIT</text><text class="s" x="696" y="362">ffmpeg join, numpy mix</text><text class="s" x="696" y="386">-14 LUFS, five encodes</text>
+      </g>
+      <path class="arrow" d="M282 62 H340" marker-end="url(#ah)"/>
+      <path class="arrow" d="M617 62 H675" marker-end="url(#ah)"/>
+      <path class="arrow" d="M815 116 V153" marker-end="url(#ah)"/>
+      <path class="arrow" d="M678 210 H620" marker-end="url(#ah)"/>
+      <path class="arrow" d="M343 210 H285" marker-end="url(#ah)"/>
+      <path class="arrow" d="M145 264 V301" marker-end="url(#ah)"/>
+      <path class="arrow" d="M282 358 H340" marker-end="url(#ah)"/>
+      <path class="arrow" d="M617 358 H675" marker-end="url(#ah)"/>
+    </svg>
+  </div>
+  <!-- SLOT:bts -->
+  <div class="bts" id="bts">
+    <h3 class="subhead">Behind the scenes: the real window</h3>
+    <p>A 3:46 tour of the Studio window as you get it in Unity: the window itself, Bonk built step by step, every drawing tool at real speed, palettes, animation, tiles, an agent driving the open document, and how the trailer above was assembled. Every window shot is the real Editor, recorded on 2026-10-09; the cursor is drawn afterwards from the logged input, and the timelapses carry their speed.</p>
+    <div class="screen" style="width:auto;max-width:960px">
+      <video id="bts-video" controls preload="metadata" playsinline width="960" height="540" poster="media/bts-poster.png">
+        <source src="PixelArtStudio-BehindTheScenes-page.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="watch"><a href="https://youtu.be/6D3o98zsSJg">Watch on YouTube</a></p>
+    <ol class="bts-chapters mono">
+      <li><button type="button" class="chipbtn" data-bts="0">0:00 Cold open</button></li>
+      <li><button type="button" class="chipbtn" data-bts="11">0:11 The window</button></li>
+      <li><button type="button" class="chipbtn" data-bts="28">0:28 Build a character</button></li>
+      <li><button type="button" class="chipbtn" data-bts="66">1:06 Drawing tools</button></li>
+      <li><button type="button" class="chipbtn" data-bts="102">1:42 Palettes</button></li>
+      <li><button type="button" class="chipbtn" data-bts="114">1:54 Animation</button></li>
+      <li><button type="button" class="chipbtn" data-bts="134">2:14 Tiles</button></li>
+      <li><button type="button" class="chipbtn" data-bts="155">2:35 An agent drives the window</button></li>
+      <li><button type="button" class="chipbtn" data-bts="179">2:59 How the trailer was made</button></li>
+      <li><button type="button" class="chipbtn" data-bts="213">3:33 What you get</button></li>
+    </ol>
+    <p class="muted">The 960 &times; 540 page copy. The music is an original chiptune score synthesised in code for this video ("workshop", D major, 100 BPM, -14 LUFS). The 1080p version is on YouTube.</p>
+  </div>
+</section>
+
+<section id="fallbacks" aria-labelledby="h-fallbacks">
+  <div class="sec-head">
+    <h2 id="h-fallbacks" class="levelcard">Where the plugin fell short</h2>
+    <p>While they built the trailer, the agents wrote down every place where the plugin's verbs were not enough and they had to fall back to a script of their own: 136 notes in all. 86 of them asked for a new verb and 22 for a clearer explanation in the plugin's SKILL.md. The first 40 became a round of new plugin features, among them the verbs that peel a design, clean a frame, grow hidden overlap and check a pose, which brought the plugin to 83 verbs (65 commands and 18 queries).</p>
+  </div>
+</section>
+
+<section id="numbers" aria-labelledby="h-numbers">
+  <div class="sec-head">
+    <h2 id="h-numbers" class="levelcard">The numbers</h2>
+    <p>Every figure here is read from a file: the script, the build logs and reports, the op logs and the capture folders.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>5,220</b><span>frames: 87.0 s at 60 fps, recorded at native, x4 and x8</span></div>
+    <div class="stat"><b>8</b><span>scenes, compiled together into one script</span></div>
+    <div class="stat"><b>314</b><span>beats, 60 text rows, 63 audio slots, 217 cue rows</span></div>
+    <div class="stat"><b>35</b><span>documents in the master (55 actors); 47 .pas files in the trailer folders (7 in Cast/, 7 in Palettes/, 28 in Stages/, 5 in UI/)</span></div>
+    <div class="stat"><b>106 / 130</b><span>layers / frames across the seven cast documents</span></div>
+    <div class="stat"><b>145 / 145</b><span>FrameCheck frames at 0 px in the master takes, x4 and x8 exact</span></div>
+    <div class="stat"><b>54</b><span>distinct pas.* verbs in 21,628 logged calls (16 op logs)</span></div>
+    <div class="stat"><b>136</b><span>places the agents noted where the plugin fell short</span></div>
+    <div class="stat"><b>442</b><span>tests of the trailer tooling, all passing</span></div>
+    <div class="stat"><b>53 min</b><span>of recording for the eight master takes, as the log rounds it; 1.8 GB on disk</span></div>
+    <div class="stat"><b>7.11 GB</b><span>highest Editor RSS (Sir Stacks' first motion pass, stopped); master takes stayed at or under 3.2 GB</span></div>
+    <div class="stat"><b>-14.0</b><span>LUFS integrated, true peak -1.0 dB, on the release mix</span></div>
+  </div>
+  <div class="split">
+    <figure class="chart-box">
+      <p class="eyebrow">The verbs the agents called most</p>
+      <svg class="chart" viewBox="0 0 720 424" role="img" aria-labelledby="chart-t chart-d" xmlns="http://www.w3.org/2000/svg"><title id="chart-t">Logged calls per verb, top 12</title><desc id="chart-d">pas.draw.rect: 4725; pas.read.pixels: 3938; pas.transform.free: 2701; pas.pixels.text: 1966; pas.pixels.set: 1666; pas.palette.addEntry: 1017; pas.read.palette: 656; pas.check.tears: 567; pas.render.frame: 558; pas.read.document: 488; pas.frame.duplicate: 391; pas.palette.ramp: 356</desc><line x1="190.0" y1="0" x2="190.0" y2="396" class="grid"/><text x="190.0" y="414" class="axis" text-anchor="middle">0</text><line x1="282.0" y1="0" x2="282.0" y2="396" class="grid"/><text x="282.0" y="414" class="axis" text-anchor="middle">1,000</text><line x1="374.0" y1="0" x2="374.0" y2="396" class="grid"/><text x="374.0" y="414" class="axis" text-anchor="middle">2,000</text><line x1="466.0" y1="0" x2="466.0" y2="396" class="grid"/><text x="466.0" y="414" class="axis" text-anchor="middle">3,000</text><line x1="558.0" y1="0" x2="558.0" y2="396" class="grid"/><text x="558.0" y="414" class="axis" text-anchor="middle">4,000</text><line x1="650.0" y1="0" x2="650.0" y2="396" class="grid"/><text x="650.0" y="414" class="axis" text-anchor="middle">5,000</text><g class="bar"><title>pas.draw.rect: 4,725 calls</title><text x="180" y="15.4" class="lab" text-anchor="end">pas.draw.rect</text><rect x="190" y="0" width="434.7" height="22" rx="0" class="mark"/><text x="632.7" y="15.4" class="val">4,725</text></g><g class="bar"><title>pas.read.pixels: 3,938 calls</title><text x="180" y="47.4" class="lab" text-anchor="end">pas.read.pixels</text><rect x="190" y="32" width="362.3" height="22" rx="0" class="mark"/><text x="560.3" y="47.4" class="val">3,938</text></g><g class="bar"><title>pas.transform.free: 2,701 calls</title><text x="180" y="79.4" class="lab" text-anchor="end">pas.transform.free</text><rect x="190" y="64" width="248.5" height="22" rx="0" class="mark"/><text x="446.5" y="79.4" class="val">2,701</text></g><g class="bar"><title>pas.pixels.text: 1,966 calls</title><text x="180" y="111.4" class="lab" text-anchor="end">pas.pixels.text</text><rect x="190" y="96" width="180.9" height="22" rx="0" class="mark"/><text x="378.9" y="111.4" class="val">1,966</text></g><g class="bar"><title>pas.pixels.set: 1,666 calls</title><text x="180" y="143.4" class="lab" text-anchor="end">pas.pixels.set</text><rect x="190" y="128" width="153.3" height="22" rx="0" class="mark"/><text x="351.3" y="143.4" class="val">1,666</text></g><g class="bar"><title>pas.palette.addEntry: 1,017 calls</title><text x="180" y="175.4" class="lab" text-anchor="end">pas.palette.addEntry</text><rect x="190" y="160" width="93.6" height="22" rx="0" class="mark"/><text x="291.6" y="175.4" class="val">1,017</text></g><g class="bar"><title>pas.read.palette: 656 calls</title><text x="180" y="207.4" class="lab" text-anchor="end">pas.read.palette</text><rect x="190" y="192" width="60.4" height="22" rx="0" class="mark"/><text x="258.4" y="207.4" class="val">656</text></g><g class="bar"><title>pas.check.tears: 567 calls</title><text x="180" y="239.4" class="lab" text-anchor="end">pas.check.tears</text><rect x="190" y="224" width="52.2" height="22" rx="0" class="mark"/><text x="250.2" y="239.4" class="val">567</text></g><g class="bar"><title>pas.render.frame: 558 calls</title><text x="180" y="271.4" class="lab" text-anchor="end">pas.render.frame</text><rect x="190" y="256" width="51.3" height="22" rx="0" class="mark"/><text x="249.3" y="271.4" class="val">558</text></g><g class="bar"><title>pas.read.document: 488 calls</title><text x="180" y="303.4" class="lab" text-anchor="end">pas.read.document</text><rect x="190" y="288" width="44.9" height="22" rx="0" class="mark"/><text x="242.9" y="303.4" class="val">488</text></g><g class="bar"><title>pas.frame.duplicate: 391 calls</title><text x="180" y="335.4" class="lab" text-anchor="end">pas.frame.duplicate</text><rect x="190" y="320" width="36.0" height="22" rx="0" class="mark"/><text x="234.0" y="335.4" class="val">391</text></g><g class="bar"><title>pas.palette.ramp: 356 calls</title><text x="180" y="367.4" class="lab" text-anchor="end">pas.palette.ramp</text><rect x="190" y="352" width="32.8" height="22" rx="0" class="mark"/><text x="230.8" y="367.4" class="val">356</text></g></svg>
+      <figcaption>Logged calls per verb across the op logs, top 12. The first stages were drawn mostly with <code>pas.draw.rect</code>; the final stages wrote their tiles as pixel text with <code>pas.pixels.text</code>, about one call per tile; the cast agents posed their pieces with <code>pas.transform.free</code>, Sir Stacks alone 1,571 times.</figcaption>
+    </figure>
+    <div>
+      <p class="eyebrow">Agent wall time, as the logs record it</p>
+      <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>Work</th><th>Minutes</th></tr></thead>
+        <tbody>
+          <tr><td>Sir Stacks: still, overlap pass, motion</td><td class="num">18, 67, 38</td></tr>
+          <tr><td>Pip: still, motion</td><td class="num">25, 14</td></tr>
+          <tr><td>Glob: still and motion</td><td class="num">14</td></tr>
+          <tr><td>Brash: still, motion</td><td class="num">31, 23</td></tr>
+          <tr><td>Bonk: still, motion</td><td class="num">37, 14</td></tr>
+          <tr><td>Mira: still, motion</td><td class="num">22, 10</td></tr>
+          <tr><td>Stages, first version (two agents)</td><td class="num">19, 15</td></tr>
+          <tr><td>UI kit, credits, Doodle</td><td class="num">11</td></tr>
+          <tr><td>Tool captures; Arena wall and rows</td><td class="num">13, 15</td></tr>
+          <tr><td>Stages, final version: Arena, Courtyard, Rooftop, Overworld, Sketch</td><td class="num">45, 21, 22, 18, 20</td></tr>
+          <tr><td>Scenes: intro, 1-1, 1-2, 1-3, 1-4, outro, credits, post-credit</td><td class="num">6, 8, 7, 22, 25, 8, 3, 7</td></tr>
+          <tr><td>Re-take of all eight on the final stages</td><td class="num">25</td></tr>
+          <tr><td>Edit and release encodes</td><td class="num">18</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="credits" aria-labelledby="h-credits">
+  <div class="sec-head">
+    <h2 id="h-credits" class="levelcard">Credits</h2>
+  </div>
+  <div class="cast-plates" aria-label="Cast">
+    <span class="plate plate-lg" style="--p:#2B569C">SIR STACKS</span>
+    <span class="plate plate-lg" style="--p:#206871">PIP</span>
+    <span class="plate plate-lg" style="--p:#9E1622;--pi:#FFE07A">CAPTAIN PALETTE</span>
+    <span class="plate plate-lg" style="--p:#265C39">GLOB</span>
+    <span class="plate plate-lg" style="--p:#702C7E">BRASH</span>
+    <span class="plate plate-lg" style="--p:#465624">BONK</span>
+    <span class="plate plate-lg" style="--p:#6F2546">MIRA</span>
+    <span class="plate plate-lg" style="--p:#4A4A55">DOODLE</span>
+  </div>
+  <figure class="credits-img"><img class="px" src="media/world/credits.png" width="960" height="364" loading="lazy" alt="The credits sheet: CAST, Sir Stacks, Pip / Captain Palette, Glob, Brash, Bonk, Mira, Doodle"></figure>
+  <!-- SLOT:store -->
+<div class="store" id="store">
+  <p class="eyebrow">Asset Store images, in store order</p>
+  <p>Ten 2400 &times; 1600 images made from trailer frames: six are trailer art with callouts, four put the Studio window over the stage. Shown at a quarter of their size.</p>
+  <div class="store-row"><figure><img src="media/store/shot-03-A.png" width="600" height="400" loading="lazy" alt="Store image 1: Captain Palette on the Rooftop, with the five-palette strip"><figcaption><span class="mono">01</span> Captain Palette on the Rooftop, with the five-palette strip</figcaption></figure><figure><img src="media/store/shot-02-B.png" width="600" height="400" loading="lazy" alt="Store image 2: The Layers panel: hide state S3, groups and the Glint clip"><figcaption><span class="mono">02</span> The Layers panel: hide state S3, groups and the Glint clip</figcaption></figure><figure><img src="media/store/shot-06-A.png" width="600" height="400" loading="lazy" alt="Store image 3: Brash's KO with the strip of turn frames"><figcaption><span class="mono">03</span> Brash's KO with the strip of turn frames</figcaption></figure><figure><img src="media/store/shot-03-B.png" width="600" height="400" loading="lazy" alt="Store image 4: The palette menu on the five library palettes"><figcaption><span class="mono">04</span> The palette menu on the five library palettes</figcaption></figure><figure><img src="media/store/shot-02-A.png" width="600" height="400" loading="lazy" alt="Store image 5: Sir Stacks with the S0&ndash;S6 hide-state strip"><figcaption><span class="mono">05</span> Sir Stacks with the S0&ndash;S6 hide-state strip</figcaption></figure><figure><img src="media/store/shot-06-B.png" width="600" height="400" loading="lazy" alt="Store image 6: KO Grey with the Hue/Saturation settings at -100"><figcaption><span class="mono">06</span> KO Grey with the Hue/Saturation settings at -100</figcaption></figure><figure><img src="media/store/shot-08-A.png" width="600" height="400" loading="lazy" alt="Store image 7: Mira's sketch level with five tools marked"><figcaption><span class="mono">07</span> Mira's sketch level with five tools marked</figcaption></figure><figure><img src="media/store/shot-05-B.png" width="600" height="400" loading="lazy" alt="Store image 8: The Tileset and the Scratchpad (the Arena map)"><figcaption><span class="mono">08</span> The Tileset and the Scratchpad (the Arena map)</figcaption></figure><figure><img src="media/store/shot-07-A.png" width="600" height="400" loading="lazy" alt="Store image 9: Bonk's counter, with the moss and the eyes at x2"><figcaption><span class="mono">09</span> Bonk's counter, with the moss and the eyes at x2</figcaption></figure><figure><img src="media/store/shot-04-A.png" width="600" height="400" loading="lazy" alt="Store image 10: Glob, green to pink"><figcaption><span class="mono">10</span> Glob, green to pink</figcaption></figure></div>
+</div>
+</section>
+
+<footer>
+  <p>Sources: <code>trailer.json</code>, <code>cast.json</code>, the build logs and reports, the fallback log, the op logs and the capture folders. Recorded 2026-10-08.</p>
+  <p>The Pixel Art Studio user manual ships inside the <a href="../index.html#h-plugin">Pixel Art Studio package</a> (<code>Assets/PixelArtStudio/Documentation/PixelArtStudio-Manual.pdf</code>), and its chapter 25 covers the pipeline the cast was designed with: <a href="../index.html">Pixel-Art-Pipeline</a>.</p>
+  <p>The images, GIFs and the trailer and behind-the-scenes videos on this page are CC BY 4.0 (<a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/blob/main/LICENSE-MEDIA">LICENSE-MEDIA</a>); the YouTube uploads are the same videos.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  var video = document.getElementById("trailer-video");
+  var head = document.getElementById("playhead");
+  var spans = Array.prototype.slice.call(document.querySelectorAll(".timeline .span"));
+  var LEN = 87;
+  function seek(t) {
+    if (!video) return;
+    try { video.currentTime = t; } catch (e) {}
+    var p = video.play();
+    if (p && p.catch) p.catch(function () {});
+    var r = video.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight) video.scrollIntoView({ block: "center" });
+  }
+  document.querySelectorAll("[data-t]").forEach(function (b) {
+    b.addEventListener("click", function () { seek(parseFloat(b.getAttribute("data-t"))); });
+  });
+  function tick() {
+    var t = video.currentTime || 0;
+    head.style.left = Math.min(100, t / LEN * 100) + "%";
+    spans.forEach(function (s, i) {
+      var a = parseFloat(s.getAttribute("data-t"));
+      var b = i + 1 < spans.length ? parseFloat(spans[i + 1].getAttribute("data-t")) : LEN + 1;
+      s.setAttribute("aria-current", t >= a && t < b ? "true" : "false");
+    });
+  }
+  if (video) { video.addEventListener("timeupdate", tick); video.addEventListener("seeked", tick); tick(); }
+
+  var note = document.getElementById("scale-note");
+  function scale() {
+    if (!video || !note) return;
+    var k = video.clientWidth / 480;
+    var whole = Math.abs(k - Math.round(k)) < 0.01;
+    note.textContent = whole ? "shown at x" + Math.round(k) + ", nearest neighbour" : "shown at " + k.toFixed(2) + "x to fit the screen, nearest neighbour";
+  }
+  window.addEventListener("resize", scale); scale();
+
+  document.querySelectorAll(".compare").forEach(function (c) {
+    var r = c.querySelector(".cmp");
+    r.addEventListener("input", function () { c.style.setProperty("--pos", r.value + "%"); });
+  });
+
+  document.querySelectorAll("[data-bts]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var v = document.getElementById("bts-video");
+      if (!v) return;
+      try { v.currentTime = parseFloat(b.getAttribute("data-bts")); } catch (e) {}
+      var p = v.play(); if (p && p.catch) p.catch(function () {});
+    });
+  });
+})();
+</script>
+</body>
+</html>

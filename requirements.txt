@@ -1,0 +1,5 @@
+# Python packages scripts/krea.py and scripts/pixel_snap.py import (tested: Pillow 12.2, numpy 1.26, scipy 1.13 on
+# Python 3.10; Pillow 12.3, numpy 2.5, scipy 1.18 in ComfyUI's Python 3.12 venv)
+Pillow
+numpy
+scipy

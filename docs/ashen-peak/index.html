@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ashen Peak</title>
+<meta name="description" content="A Mortal Kombat-style fighting scene built by an agent at pixel level: two fighters with full movesets, a parallax stage, a fighting HUD.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --ground: #1A1330; --deep: #221839; --panel: #2E1A45; --rule: #452B5C;
+  --ink: #FFE8D6; --muted: #C9A9B8; --gold: #FFCB7A; --ember: #F59A5A; --crimson: #E0564E; --jade: #55957C;
+  --display: "Bungee", "JetBrains Mono", ui-monospace, monospace;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); margin: 0; }
+main { max-width: 1080px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 64px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); line-height: 0.95; color: var(--gold); text-shadow: 3px 3px 0 #822F55; }
+h2 { font-size: 1.7rem; line-height: 1.1; }
+h3 { font-size: 1.35rem; line-height: 1; }
+p { margin: 0; max-width: 68ch; }
+.muted { color: var(--muted); }
+.eyebrow { font: 600 0.72rem/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ember); }
+.stack { display: grid; gap: 14px; }
+img.px { image-rendering: pixelated; image-rendering: crisp-edges; display: block; max-width: 100%; height: auto; }
+.screen { background: #000; border: 3px solid var(--ink); box-shadow: 0 0 0 5px var(--ground), 0 0 0 8px var(--crimson); max-width: 1024px; }
+.screen img { width: 1024px; }
+.caption { font: 400 0.82rem/1.5 var(--mono); color: var(--muted); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 20px; font: 400 0.82rem/1.4 var(--mono); color: var(--muted); }
+.facts b { color: var(--gold); font-weight: 600; font-variant-numeric: tabular-nums; }
+.beats { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 14px; }
+.beat { display: grid; gap: 5px; align-content: start; }
+.beat img { width: 100%; border: 1px solid var(--rule); }
+.beat b { font-family: var(--display); font-size: 1rem; font-weight: 400; color: var(--gold); line-height: 1.1; }
+.beat span { font-size: 0.84rem; color: var(--muted); line-height: 1.4; }
+.beat .t { font: 600 0.68rem/1 var(--mono); color: var(--ember); letter-spacing: 0.06em; }
+.fighter { background: var(--deep); border: 1px solid var(--rule); padding: 18px; display: grid; gap: 16px; }
+.fighter header { display: grid; gap: 4px; }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 10px; max-width: 520px; }
+.pair figure { margin: 0; display: grid; gap: 6px; }
+.pair img { width: 100%; }
+.label { font: 600 0.7rem/1.3 var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+.moves { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.moves figure { margin: 0; display: grid; gap: 4px; }
+.moves img { width: 100%; }
+.moves figcaption { font: 400 0.75rem/1.3 var(--mono); color: var(--muted); }
+.moves figcaption b { color: var(--ink); font-weight: 600; }
+details { border-top: 1px solid var(--rule); padding-top: 10px; }
+details summary { cursor: pointer; font: 600 0.8rem/1.4 var(--mono); color: var(--gold); }
+details summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.wide { overflow-x: auto; margin-top: 10px; }
+.wide img { min-width: 640px; width: 100%; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 20px; align-items: start; }
+.two figure { margin: 0; display: grid; gap: 8px; }
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; max-width: 76ch; }
+ol.steps li::marker { color: var(--gold); font-family: var(--mono); }
+ul.checks { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; max-width: 76ch; }
+ul.checks li::marker { color: var(--jade); }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font: 400 0.85rem/1.4 var(--mono); }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+th { color: var(--muted); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+td.ok { color: var(--jade); }
+code { font-family: var(--mono); font-size: 0.86em; color: var(--gold); }
+pre.cmd { margin: 0; padding: 12px 14px; background: var(--deep); border: 1px solid var(--rule); overflow-x: auto; font: 400 0.8rem/1.55 var(--mono); color: var(--ink); }
+footer a, .stack a { color: var(--gold); }
+footer { font: 400 0.78rem/1.6 var(--mono); color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+</style>
+<link rel="stylesheet" href="../assets/site-tabs.css">
+</head>
+<body>
+<a class="site-skip" href="#content">Skip to content</a>
+<nav class="site-tabs" aria-label="Site">
+  <ul>
+    <li><a href="../index.html">Pipeline</a></li>
+    <li><a href="../pixel-art-studio/index.html">Pixel Art Studio</a></li>
+    <li><a href="../ashen-peak/index.html" aria-current="page">Ashen Peak</a></li>
+    <li><a href="../drowned-shrine/index.html">Drowned Shrine</a></li>
+  </ul>
+</nav>
+<main id="content">
+  <header class="stack">
+    <span class="eyebrow">Pixel Art Studio · agent-built fighting scene · 256 × 144</span>
+    <h1>Ashen Peak</h1>
+    <p>A one-round fight in the style of <em>Mortal Kombat</em>: side view, health bars, a round timer, call-outs,
+      combos and knockdowns, on a temple court at dusk. The fighters are original: Riku, a quick monk who fights with
+      kicks, against Grimhold, an armoured giant. Krea 2 drew their two designs and nothing else. Every animation
+      frame, the stage, the HUD and the effects were drawn in code, pixel by pixel.</p>
+    <div class="facts"><span><b>137</b> character frames, all reviewed</span><span><b>28</b> moves</span><span><b>0</b> pinholes, <b>0</b> floating pieces</span><span><b>360</b> ticks · 28.8 s loop</span><span><b>3</b> plugin files, identical to the original frames</span></div>
+  </header>
+
+  <section class="stack">
+    <div class="screen"><img class="px" src="media/fight.gif" alt="The full fight loop" width="1024" height="576"></div>
+    <p class="caption">The full round at 4×. The GIF is 256 × 144 native, scaled up by your browser without smoothing.</p>
+  </section>
+
+  <section class="stack">
+    <h2>The round, beat by beat</h2>
+    <div class="beats">
+      <div class="beat"><img class="px" src="media/key_26.png" alt="Round 1"><span class="t">0 – 2.9 s</span><b>Round 1</b><span>The camera settles on the temple court; ROUND 1, then FIGHT!</span></div>
+      <div class="beat"><img class="px" src="media/key_57.png" alt="Three hits"><span class="t">2.4 – 5 s</span><b>Three hits</b><span>Riku walks in: jab, cross, then a roundhouse to the head. 3 HITS.</span></div>
+      <div class="beat"><img class="px" src="media/key_80.png" alt="The charge"><span class="t">5 – 8.5 s</span><b>The charge</b><span>Grimhold's hook is blocked, then his shoulder charge flattens Riku.</span></div>
+      <div class="beat"><img class="px" src="media/key_124.png" alt="Over the wave"><span class="t">9 – 11 s</span><b>Over the wave</b><span>The ground slam sends a shockwave; Riku jumps it and lands a flying kick.</span></div>
+      <div class="beat"><img class="px" src="media/key_156.png" alt="Sun Palm"><span class="t">11.7 – 12.6 s</span><b>Sun Palm</b><span>While Grimhold roars, Riku's fireball crosses the court and bursts.</span></div>
+      <div class="beat"><img class="px" src="media/key_180.png" alt="Launched"><span class="t">13 – 17 s</span><b>Launched</b><span>Grimhold's uppercut throws Riku into the air; he hits the stones.</span></div>
+      <div class="beat"><img class="px" src="media/key_225.png" alt="Sweep"><span class="t">17.6 – 21 s</span><b>Sweep</b><span>Riku sweeps the giant off his feet.</span></div>
+      <div class="beat"><img class="px" src="media/key_295.png" alt="Thousand Suns"><span class="t">21 – 24 s</span><b>Thousand Suns</b><span>A second charge whiffs. Riku lands four burning strikes...</span></div>
+      <div class="beat"><img class="px" src="media/key_302.png" alt="K.O."><span class="t">24 – 25 s</span><b>K.O.</b><span>...and a flaming uppercut: a hit-freeze, K.O.</span></div>
+      <div class="beat"><img class="px" src="media/key_330.png" alt="Riku wins"><span class="t">25 – 28.8 s</span><b>Riku wins</b><span>The giant lies still, the medallion lights, RIKU WINS, fade.</span></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Riku</h2>
+    <article class="fighter">
+      <header><span class="eyebrow">P1 · the monk · 15 pieces · 16 moves · 76 frames</span></header>
+      <div class="pair">
+        <figure><img class="px" src="media/riku_krea.png" alt="Krea 2 design"><span class="label">Krea 2 design</span></figure>
+        <figure><img class="px" src="media/riku_grid.png" alt="64-grid version"><span class="label">64 grid, scene palette</span></figure>
+      </div>
+      <div class="moves">
+          <figure><img class="px" src="media/riku_stance.gif" alt="riku Stance"><figcaption><b>Stance</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/riku_walk.gif" alt="riku Walk"><figcaption><b>Walk</b> · 8</figcaption></figure>
+          <figure><img class="px" src="media/riku_jab.gif" alt="riku Jab"><figcaption><b>Jab</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/riku_cross.gif" alt="riku Cross"><figcaption><b>Cross</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/riku_roundhouse.gif" alt="riku Roundhouse"><figcaption><b>Roundhouse</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/riku_sweep.gif" alt="riku Sweep"><figcaption><b>Sweep</b> · 5</figcaption></figure>
+          <figure><img class="px" src="media/riku_jump.gif" alt="riku Jump"><figcaption><b>Jump</b> · 5</figcaption></figure>
+          <figure><img class="px" src="media/riku_flykick.gif" alt="riku Flying kick"><figcaption><b>Flying kick</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/riku_uppercut.gif" alt="riku Uppercut"><figcaption><b>Uppercut</b> · 5</figcaption></figure>
+          <figure><img class="px" src="media/riku_sunpalm.gif" alt="riku Sun Palm"><figcaption><b>Sun Palm</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/riku_block.gif" alt="riku Block"><figcaption><b>Block</b> · 2</figcaption></figure>
+          <figure><img class="px" src="media/riku_hit.gif" alt="riku Hit"><figcaption><b>Hit</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/riku_knockdown.gif" alt="riku Knockdown"><figcaption><b>Knockdown</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/riku_getup.gif" alt="riku Get up"><figcaption><b>Get up</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/riku_launch.gif" alt="riku Launched"><figcaption><b>Launched</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/riku_victory.gif" alt="riku Victory"><figcaption><b>Victory</b> · 6</figcaption></figure>
+      </div>
+      <details><summary>His 15 pieces (stacked, they equal the design: 0 px different)</summary><div class="wide"><img class="px" src="media/riku_layers.png" alt="Riku's pieces"></div></details>
+    </article>
+  </section>
+
+  <section class="stack">
+    <h2>Grimhold</h2>
+    <article class="fighter">
+      <header><span class="eyebrow">P2 · the armoured giant · 14 pieces · 12 moves · 61 frames · mirrored in the fight</span></header>
+      <div class="pair">
+        <figure><img class="px" src="media/grimhold_krea.png" alt="Krea 2 design"><span class="label">Krea 2 design</span></figure>
+        <figure><img class="px" src="media/grimhold_grid.png" alt="64-grid version"><span class="label">64 grid, scene palette</span></figure>
+      </div>
+      <div class="moves">
+          <figure><img class="px" src="media/grimhold_stance.gif" alt="grimhold Stance"><figcaption><b>Stance</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_walk.gif" alt="grimhold Stomp walk"><figcaption><b>Stomp walk</b> · 8</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_hook.gif" alt="grimhold Hook"><figcaption><b>Hook</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_charge.gif" alt="grimhold Shoulder charge"><figcaption><b>Shoulder charge</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_slam.gif" alt="grimhold Ground slam"><figcaption><b>Ground slam</b> · 7</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_uppercut.gif" alt="grimhold Uppercut"><figcaption><b>Uppercut</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_roar.gif" alt="grimhold Roar"><figcaption><b>Roar</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_block.gif" alt="grimhold Block"><figcaption><b>Block</b> · 2</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_hit.gif" alt="grimhold Hit"><figcaption><b>Hit</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_knockdown.gif" alt="grimhold Knockdown"><figcaption><b>Knockdown</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_getup.gif" alt="grimhold Get up"><figcaption><b>Get up</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/grimhold_launch.gif" alt="grimhold Launched"><figcaption><b>Launched</b> · 3</figcaption></figure>
+      </div>
+      <details><summary>His 14 pieces (stacked, they equal the design: 0 px different)</summary><div class="wide"><img class="px" src="media/grimhold_layers.png" alt="Grimhold's pieces"></div></details>
+    </article>
+  </section>
+
+  <section class="stack">
+    <h2>Stage, HUD and effects</h2>
+    <p class="muted">Six parallax layers scroll at different speeds as the camera follows the fighters: the sky, far
+      peaks, near peaks with snow lit pink, the temple with swaying lanterns and rippling banners, the courtyard, and
+      plum branches in front. Petals drift across the court.</p>
+    <figure style="margin:0"><img class="px" src="media/stage_layers.png" alt="the stage's parallax layers" style="width:100%"><span class="caption">The six layers, each shown alone.</span></figure>
+    <div class="two">
+      <figure><img class="px" src="media/hud_check.png" alt="HUD" style="width:100%"><span class="caption">Health bars with a red ghost of lost health, the timer, names, round medallions, a hand-drawn 11 px call-out font, the combo counter.</span></figure>
+      <figure><img class="px" src="media/ffx_sheet.png" alt="effects" style="width:100%"><span class="caption">The Sun Palm fireball, the ground slam's shockwave, dust, block and hit sparks, the flaming uppercut arc, speed lines.</span></figure>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>How the characters stay whole</h2>
+    <p class="muted">The goal: characters that never tear. Every frame passed these checks. The agent skill holds the same checks.</p>
+    <ul class="checks">
+      <li><b>Only design pixels.</b> Each limb is the design's own thigh, shin, foot, upper arm and forearm, turned about
+        its real joints (IK with the design's bone lengths). No limb is redrawn, so nothing can "crumble".</li>
+      <li><b>Hidden ends are painted.</b> Each piece is completed where others cover it (thigh tops under the belt, the
+        torso under the arms), so a moving joint shows the part, never a gap.</li>
+      <li><b>Cloth can't tear.</b> The headband tails, gi skirt and tabard bend by an inverse warp: every output pixel
+        takes a source pixel.</li>
+      <li><b>0 pinholes, 0 floating pieces, on all 137 frames.</b> A detector counts enclosed 1–4 px pockets and
+        separate islands. It found fragments stranded at an elbow and a waist wedge opening in leans, both fixed at the
+        source.</li>
+      <li><b>Every animation reviewed zoomed</b> against a ground line, then every contact checked on contact sheets
+        of the full fight. That review changed the kicks: the fighters are chibi (big heads, short legs), so a kick
+        tips the whole body back about the planted foot. Punches are kept clear of the face.</li>
+      <li><b>The plugin agrees.</b> The plugin renders every frame of all three documents identical to the original frames.</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>In the plugin</h2>
+    <div class="table"><table>
+      <thead><tr><th>Document</th><th>Canvas</th><th>Layers</th><th>Frames</th><th>Tags</th><th>Plugin render vs original</th></tr></thead>
+      <tbody>
+        <tr><td>Riku.pas</td><td>128 × 96</td><td>16</td><td>76</td><td>16 moves</td><td class="ok">identical</td></tr>
+        <tr><td>Grimhold.pas</td><td>128 × 96</td><td>15</td><td>61</td><td>12 moves</td><td class="ok">identical</td></tr>
+        <tr><td>AshenPeak.pas</td><td>400 × 144</td><td>6</td><td>8</td><td>Ambient</td><td class="ok">identical</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="stack">
+    <h2>The agent skill</h2>
+    <p class="muted">The whole method, as an agent skill: <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/skills/pixel-scene"><code>skills/pixel-scene/</code></a> in this repository.</p>
+    <ul class="checks">
+      <li><code>SKILL.md</code>: the workflow from design to published page, and the rules.</li>
+      <li><code>references/lessons.md</code>: 28 lessons, each with its symptom, its cause and its fix.</li>
+      <li><code>references/qa-checklist.md</code>: the frame review.</li>
+      <li><code>references/code-map.md</code>: where everything lives.</li>
+      <li><code>scripts/</code>: the review tools.</li>
+    </ul>
+  </section>
+
+  <section class="stack">
+    <h2>Reproduce it</h2>
+    <p class="muted">The fight is in this repository and rebuilds from the two designs with no GPU: about three minutes on a
+      laptop, with Python 3.10+ and Pillow, NumPy and SciPy (<code>requirements.txt</code>). Run from the repository root;
+      everything is written to <code>out/scenes/ashen_peak/</code>. The frames come out identical to the GIF above.</p>
+    <pre class="cmd">python scenes/ashen_peak/riku.py           # 15 pieces; the stack equals the design (0 px)
+python scenes/ashen_peak/grimhold.py       # 14 pieces
+python scenes/ashen_peak/riku_anim.py      # 76 frames: "pinholes/specks: none"
+python scenes/ashen_peak/grimhold_anim.py  # 61 frames
+python scenes/ashen_peak/fight.py          # the 360-tick round: ashen_peak.gif
+python scenes/ashen_peak/fsheet.py riku stance,walk,jab 3   # a review sheet with the ground line and pinhole counts</pre>
+    <p class="muted">The designs came from <code>scenes/ashen_peak/designs.sh</code> (Krea 2 through <code>scripts/krea.py</code>,
+      needs ComfyUI); the picked ones are in <code>scenes/designs/</code>. The three <code>.pas</code> files are in
+      <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes/pas">scenes/pas/</a>. To rebuild them, <code>export.py</code> drives a scratch Unity project
+      with <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/unity/PasBuilder">unity/PasBuilder</a> (see <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes">scenes/README.md</a>).</p>
+  </section>
+
+  <footer>Source: <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes/ashen_peak"><code>scenes/ashen_peak/</code></a>.
+    <ul>
+      <li>The rig: <code>rig.py</code>.</li>
+      <li>The fighters: <code>riku.py</code>, <code>riku_anim.py</code>, <code>grimhold.py</code>, <code>grimhold_anim.py</code>.</li>
+      <li>The world: <code>stage.py</code>, <code>hud.py</code>, <code>ffx.py</code>.</li>
+      <li>The fight: <code>fight.py</code>.</li>
+      <li>The plugin export: <code>export.py</code>.</li>
+    </ul>
+    The plugin files are in <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes/pas"><code>scenes/pas/</code></a>. Code: MIT. Art, GIFs and .pas files: CC BY 4.0 (LICENSE-MEDIA).</footer>
+</main>
+</body>
+</html>

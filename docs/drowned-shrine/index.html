@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Drowned Shrine</title>
+<meta name="description" content="A looping turn-based battle scene built by an agent at pixel level: tiles, two fighters, effects and UI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --ground: #0B0A16; --deep: #141326; --panel: #1E1D38; --rule: #2A2B4C;
+  --ink: #F4EEDC; --muted: #9AA6C4; --gold: #F5D878; --gold-dim: #A8782C; --glow: #6FE6EC; --crimson: #E0564E;
+  --display: "Jersey 10", "JetBrains Mono", ui-monospace, monospace;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); margin: 0; }
+main { max-width: 1060px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 64px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: 0.01em; }
+h1 { font-size: clamp(3rem, 9vw, 5.4rem); line-height: 0.9; color: var(--gold); }
+h2 { font-size: 2.4rem; line-height: 1; }
+h3 { font-size: 1.7rem; line-height: 1; }
+p { margin: 0; max-width: 66ch; }
+.muted { color: var(--muted); }
+.eyebrow { font: 600 0.72rem/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--glow); }
+.stack { display: grid; gap: 14px; }
+img.px { image-rendering: pixelated; image-rendering: crisp-edges; display: block; max-width: 100%; height: auto; }
+.hero { display: grid; gap: 12px; }
+.screen { background: #000; border: 3px solid var(--ink); outline: 3px solid var(--ground); box-shadow: 0 0 0 6px var(--gold-dim); max-width: 960px; }
+.screen img { width: 960px; }
+.caption { font: 400 0.82rem/1.5 var(--mono); color: var(--muted); }
+.beats { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 12px; }
+.beat { display: grid; gap: 6px; align-content: start; }
+.beat img { width: 100%; border: 1px solid var(--rule); }
+.beat b { font-family: var(--display); font-size: 1.35rem; font-weight: 400; line-height: 1; color: var(--gold); }
+.beat span { font-size: 0.84rem; color: var(--muted); line-height: 1.4; }
+.beat .t { font: 600 0.7rem/1 var(--mono); color: var(--glow); letter-spacing: 0.06em; }
+.cast { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 28px; }
+.fighter { background: var(--deep); border: 1px solid var(--rule); padding: 18px; display: grid; gap: 16px; align-content: start; }
+.fighter header { display: grid; gap: 4px; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pair figure { margin: 0; display: grid; gap: 6px; }
+.pair img { width: 100%; }
+.label { font: 600 0.7rem/1.3 var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+.anims { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.anims figure { margin: 0; display: grid; gap: 4px; }
+.anims img { width: 100%; }
+.anims figcaption { font: 400 0.75rem/1.3 var(--mono); color: var(--muted); }
+.anims figcaption b { color: var(--ink); font-weight: 600; }
+details { border-top: 1px solid var(--rule); padding-top: 10px; }
+details summary { cursor: pointer; font: 600 0.8rem/1.4 var(--mono); color: var(--glow); }
+details summary:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.wide { overflow-x: auto; margin-top: 10px; }
+.wide img { min-width: 640px; width: 100%; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 20px; align-items: start; }
+.two figure { margin: 0; display: grid; gap: 8px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 18px; font: 400 0.82rem/1.4 var(--mono); color: var(--muted); }
+.facts b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+ol.steps { margin: 0; padding-left: 1.3em; display: grid; gap: 10px; max-width: 74ch; }
+ol.steps li::marker { color: var(--gold); font-family: var(--mono); }
+.table { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font: 400 0.85rem/1.4 var(--mono); }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); font-variant-numeric: tabular-nums; }
+th { color: var(--muted); font-weight: 600; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+td.ok { color: var(--glow); }
+pre.cmd { margin: 0; padding: 12px 14px; background: var(--deep); border: 1px solid var(--rule); overflow-x: auto; font: 400 0.8rem/1.55 var(--mono); color: var(--ink); }
+footer a, .stack a { color: var(--glow); }
+footer { font: 400 0.78rem/1.6 var(--mono); color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+code { font-family: var(--mono); font-size: 0.86em; color: var(--gold); }
+</style>
+<link rel="stylesheet" href="../assets/site-tabs.css">
+</head>
+<body>
+<a class="site-skip" href="#content">Skip to content</a>
+<nav class="site-tabs" aria-label="Site">
+  <ul>
+    <li><a href="../index.html">Pipeline</a></li>
+    <li><a href="../pixel-art-studio/index.html">Pixel Art Studio</a></li>
+    <li><a href="../ashen-peak/index.html">Ashen Peak</a></li>
+    <li><a href="../drowned-shrine/index.html" aria-current="page">Drowned Shrine</a></li>
+  </ul>
+</nav>
+<main id="content">
+  <header class="stack">
+    <span class="eyebrow">Pixel Art Studio · agent-built battle scene · 320 × 180 · 16 px tiles</span>
+    <h1>The Drowned Shrine</h1>
+    <p>A turn-based battle in the style of <em>Sea of Stars</em> (2023), with an original cast and setting. A swordswoman
+      fights a floating anglerfish spirit in a flooded shrine at night. Krea 2 drew the two character designs and nothing
+      else. The agent drew all the rest in code, pixel by pixel: the tiles, every animation frame, the effects, the
+      lighting and the UI. The loop is 336 ticks of 80 ms, about 27 seconds.</p>
+  </header>
+
+  <section class="hero">
+    <div class="screen"><img class="px" src="media/shrine.gif" alt="The full looping battle: intro, attack, bite and block, the charge, Dawn Cleave, victory" width="960" height="540"></div>
+    <p class="caption">The full loop at 3×. The GIF is 320 × 180 native, scaled up by your browser without smoothing.</p>
+  </section>
+
+  <section class="stack">
+    <h2>The fight, beat by beat</h2>
+    <div class="beats">
+      <div class="beat"><img class="px" src="media/key_24.png" alt="the boss rising from the pool"><span class="t">0.0 – 3.6 s</span><b>It rises</b><span>Bubbles, a water plume, and the Gloomlure surfaces. The name plates slide in.</span></div>
+      <div class="beat"><img class="px" src="media/key_84.png" alt="the timed second slash"><span class="t">3.7 – 8.0 s</span><b>Attack</b><span>Menu, dash, a forehand cut for 14, then a rising cut timed PERFECT! for 21.</span></div>
+      <div class="beat"><img class="px" src="media/key_114.png" alt="the bite blocked"><span class="t">8.0 – 10.5 s</span><b>Abyssal Bite</b><span>The jaw opens wide and the eye blazes. Kestrel's timed BLOCK! keeps the hit to 8.</span></div>
+      <div class="beat"><img class="px" src="media/key_150.png" alt="the boss gathering light with locks over it"><span class="t">10.6 – 13.8 s</span><b>The charge</b><span>The room darkens toward the lure. Three locks appear: sword, sun, sun.</span></div>
+      <div class="beat"><img class="px" src="media/key_225.png" alt="Dawn Cleave's sunburst"><span class="t">13.8 – 20 s</span><b>Dawn Cleave</b><span>The slash breaks the sword lock, then a leaping sun-strike breaks both sun locks: BREAK!, 73.</span></div>
+      <div class="beat"><img class="px" src="media/key_310.png" alt="victory"><span class="t">20 – 26.9 s</span><b>Victory</b><span>The boss dissolves into light motes and the lure sinks. Victory pose, rewards, fade, loop.</span></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>The cast</h2>
+    <p class="muted">Each fighter goes from Krea's design, to the agent's 64-grid version in the scene palette, to layers
+      built back to front, to frames drawn one pose at a time.</p>
+    <div class="cast">
+      <article class="fighter">
+        <header><span class="eyebrow">Humanoid · 96 × 80 canvas · 44 frames · 18 layers</span><h3>Kestrel</h3></header>
+        <div class="pair">
+          <figure><img class="px" src="media/kestrel_krea.png" alt="Krea 2 design"><span class="label">Krea 2 design</span></figure>
+          <figure><img class="px" src="media/kestrel_grid.png" alt="the agent's 64-grid version"><span class="label">64 grid, scene palette</span></figure>
+        </div>
+        <p class="muted" style="font-size:.9rem">Every part is Krea's own pixels, including the limbs. Each leg is cut into a thigh, a shin and a cuffed boot, and each piece turns about its real hip, knee and ankle, with knee IK. Boots stay flat on the ground unless a pose tilts them. Her gloved forearms are one piece that turns about its root, and only the sword is redrawn, at wherever her gloves end up. The run is a classic 8-frame stride: contact, down, passing, push-off, heel kick, tuck, knee up, reach. Both legs use the near leg's pieces there, the far one a shade darker. The cloak and scarf tail are bent RotSprite-style, sampling backwards from each output pixel into an 8× copy of the design, so the cloth can't tear.</p>
+        <div class="anims">
+          <figure><img class="px" src="media/kestrel_idle.gif" alt="idle"><figcaption><b>Idle</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_run.gif" alt="run"><figcaption><b>Run</b> · 8</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_slash1.gif" alt="forehand slash"><figcaption><b>Slash</b> · 5</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_slash2.gif" alt="rising slash"><figcaption><b>Rising slash</b> · 5</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_hop.gif" alt="hop back"><figcaption><b>Hop back</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_block.gif" alt="block"><figcaption><b>Block</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_leap.gif" alt="leap with glowing sword"><figcaption><b>Leap</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_plunge.gif" alt="plunging strike"><figcaption><b>Plunge</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/kestrel_victory.gif" alt="victory"><figcaption><b>Victory</b> · 6</figcaption></figure>
+        </div>
+        <details><summary>Her layers (stack = design, 0 px different)</summary><div class="wide"><img class="px" src="media/kestrel_layers.png" alt="Kestrel layer sheet"></div></details>
+      </article>
+      <article class="fighter">
+        <header><span class="eyebrow">Non-humanoid · 80 × 80 canvas · 21 frames</span><h3>Gloomlure</h3></header>
+        <div class="pair">
+          <figure><img class="px" src="media/gloomlure_krea.png" alt="Krea 2 design"><span class="label">Krea 2 design</span></figure>
+          <figure><img class="px" src="media/gloomlure_grid.png" alt="the agent's 64-grid version"><span class="label">64 grid, scene palette</span></figure>
+        </div>
+        <p class="muted" style="font-size:.9rem">Nine layers. The jaw hinges at the back of the mouth over a hand-painted throat, the stalk is redrawn as a curve,
+          and the fins ripple with whole-pixel column and row shifts. Its eye has three hand-drawn states: squint, blaze and stun swirl.</p>
+        <div class="anims">
+          <figure><img class="px" src="media/gloomlure_idle.gif" alt="idle"><figcaption><b>Idle</b> · 6</figcaption></figure>
+          <figure><img class="px" src="media/gloomlure_windup.gif" alt="wind-up"><figcaption><b>Wind-up</b> · 2</figcaption></figure>
+          <figure><img class="px" src="media/gloomlure_lunge.gif" alt="lunge bite"><figcaption><b>Lunge</b> · 3</figcaption></figure>
+          <figure><img class="px" src="media/gloomlure_hurt.gif" alt="hurt"><figcaption><b>Hurt</b> · 2</figcaption></figure>
+          <figure><img class="px" src="media/gloomlure_charge.gif" alt="charging the lure"><figcaption><b>Charge</b> · 4</figcaption></figure>
+          <figure><img class="px" src="media/gloomlure_stunned.gif" alt="stunned"><figcaption><b>Stunned</b> · 4</figcaption></figure>
+        </div>
+        <details><summary>Its layers (stack = design, 0 px different)</summary><div class="wide"><img class="px" src="media/gloomlure_layers.png" alt="Gloomlure layer sheet"></div></details>
+      </article>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>The arena</h2>
+    <div class="facts"><span><b>91</b> unique tiles</span><span><b>16</b> px</span><span><b>20 × 12</b> map</span><span><b>3</b> layers: ground, deco, front</span><span><b>4</b>-frame water, flames, mushrooms, ferns</span></div>
+    <div class="two">
+      <figure><img class="px" src="media/arena.gif" alt="the arena map, animated, without fighters" style="width:100%"><span class="caption">The map with no fighters and no lighting. The pool's edge and corner tiles are picked from each cell's neighbours, and slabs that span two tiles break up the grid.</span></figure>
+      <figure><img class="px" src="media/tileset.gif" alt="the tileset, animated" style="width:100%"><span class="caption">The tileset the map is built from, stored once per tile. The night is not painted into the tiles: every frame steps each colour down its ramp, and the braziers, mushrooms and lure step it back up.</span></figure>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>UI and effects</h2>
+    <p class="muted">Two bitmap fonts drawn glyph by glyph, framed panels, HP/MP bars with a draining "lost HP" ghost, menu and lock icons, and effects drawn per frame.</p>
+    <div class="two">
+      <figure><img class="px" src="media/ui_sheet.png" alt="UI kit" style="width:100%"><span class="caption">Plates, menu, skill submenu, locks (whole, cracked, shattering), cursor, banner.</span></figure>
+      <figure><img class="px" src="media/font_sheet.png" alt="fonts" style="width:100%"><span class="caption">A 5 px UI font and a 7 px bold font for damage numbers and prompts.</span></figure>
+      <figure><img class="px" src="media/fx_sheet.png" alt="effects" style="width:100%"><span class="caption">Slash trail, impact star, sunburst, splash, charge rings, stun stars, floor ripples.</span></figure>
+      <figure><img class="px" src="media/plume_sheet.png" alt="water plume" style="width:100%"><span class="caption">The plume the boss surfaces through, 8 frames.</span></figure>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>How it was made</h2>
+    <ol class="steps">
+      <li><b>Designs.</b> Krea 2 drew the two characters, two seeds each, with a limited palette of about 12 colours. The agent picked one of each.</li>
+      <li><b>Into the scene's palette.</b> Krea's image already sits on a 16 px grid. The agent finds the grid, takes each cell's main colour, and maps it to the nearest colour in the scene's 16 colour ramps.</li>
+      <li><b>Layers, back to front.</b> Each part keeps the design's visible pixels, and whatever a part hides is painted in by hand. The check: the stacked layers equal the design exactly.</li>
+      <li><b>Frames.</b> Every frame is drawn from a pose. Design pieces (a thigh, a shin, a boot, a forearm, a jaw) turn about their real joints with RotSprite, and the knees come from IK. Only what has no fixed shape is redrawn: the sword and the lure stalk. Cloth bends by a twist sampled backwards from each output pixel, so it can never tear. Fins ripple by whole-pixel shifts, and a single ink line goes round the silhouette.</li>
+      <li><b>The world.</b> Tiles, UI, fonts and effects are drawn in code in the same palette. The lighting moves colours along their ramps with a dither, so the scene never blends colours.</li>
+      <li><b>Choreography.</b> Each tick's image depends only on the tick number, so every frame can be re-rendered on its own and the loop closes exactly.</li>
+      <li><b>Into the plugin.</b> Each asset is built into a real <code>.pas</code> by a headless copy of Unity. The plugin then renders every frame back, and the renders are compared with the originals pixel for pixel.</li>
+    </ol>
+  </section>
+
+  <section class="stack">
+    <h2>In the plugin</h2>
+    <div class="table"><table>
+      <thead><tr><th>Document</th><th>Canvas</th><th>Layers</th><th>Frames</th><th>Tags</th><th>Plugin render vs original</th></tr></thead>
+      <tbody>
+        <tr><td>ShrineTiles.pas</td><td>128 × 192</td><td>1</td><td>4</td><td>Animate · tile size 16, scratchpad 20 × 12 = the map</td><td class="ok">identical</td></tr>
+        <tr><td>ShrineArena.pas</td><td>320 × 192</td><td>3</td><td>4</td><td>Animate</td><td class="ok">identical</td></tr>
+        <tr><td>Kestrel.pas</td><td>96 × 80</td><td>18</td><td>44</td><td>Idle, Run, Slash1, Slash2, Hop, Block, Leap, Plunge, Victory</td><td class="ok">identical</td></tr>
+        <tr><td>Gloomlure.pas</td><td>80 × 80</td><td>10</td><td>21</td><td>Idle, Windup, Lunge, Hurt, Charge, Stunned</td><td class="ok">identical</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="stack">
+    <h2>Reproduce it</h2>
+    <p class="muted">The whole scene is in this repository and rebuilds from the two designs with no GPU: about a minute on a
+      laptop, with Python 3.10+ and Pillow, NumPy and SciPy (<code>requirements.txt</code>). Run from the repository root;
+      everything is written to <code>out/scenes/drowned_shrine/</code> (set <code>SCENES_OUT</code> to change it). The
+      frames come out identical to the GIF above.</p>
+    <pre class="cmd">python scenes/drowned_shrine/kestrel.py         # her 18 layers; the stack equals the design (0 px)
+python scenes/drowned_shrine/kestrel_anim.py    # 44 frames, 9 animations
+python scenes/drowned_shrine/gloomlure.py       # its layers and 21 frames
+SCENE=scenes/drowned_shrine python skills/pixel-scene/scripts/render_all.py   # the 336-tick loop: scene.gif, scene_x3.gif</pre>
+    <p class="muted">The designs came from <code>scenes/drowned_shrine/designs.sh</code> (Krea 2 through
+      <code>scripts/krea.py</code>, needs ComfyUI); the picked ones and the 64-grid inputs are in <code>scenes/designs/</code>.
+      The four <code>.pas</code> files above are in <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes/pas">scenes/pas/</a>; open them in Pixel Art Studio.
+      To rebuild them, <code>export_pas.py</code> drives a scratch Unity project with
+      <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/unity/PasBuilder">unity/PasBuilder</a> (see <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes">scenes/README.md</a>).</p>
+  </section>
+
+  <footer>Source: <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes/drowned_shrine"><code>scenes/drowned_shrine/</code></a>. The main files: <code>tiles.py</code> and <code>tilemap.py</code> (the arena), <code>kestrel.py</code> and <code>kestrel_anim.py</code>,
+    <code>gloomlure.py</code>, <code>ui.py</code>, <code>font.py</code>, <code>fx.py</code>, <code>light.py</code>, <code>scene.py</code> (the choreography) and <code>export_pas.py</code>.
+    The plugin files are in <a href="https://github.com/HardcoreBudget/Pixel-Art-Pipeline/tree/main/scenes/pas"><code>scenes/pas/</code></a>. Code: MIT. Art, GIFs and .pas files: CC BY 4.0 (LICENSE-MEDIA).</footer>
+</main>
+</body>
+</html>

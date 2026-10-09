@@ -1,0 +1,18 @@
+# generated images
+out/
+*.part
+# ComfyUI checkout, its venv and the models (install.sh puts them in ./ComfyUI)
+ComfyUI/
+models/
+*.gguf
+*.safetensors
+*.ckpt
+venv/
+.venv/
+# Python
+__pycache__/
+*.pyc
+# logs
+*.log
+# local notes
+PREPARED.md
