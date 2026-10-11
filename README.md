@@ -17,14 +17,14 @@ Three things made with this pipeline. Each page has every animation, the numbers
 <td width="33%" valign="top"><a href="https://hardcorebudget.github.io/Pixel-Art-Pipeline/drowned-shrine/"><img src="docs/drowned-shrine/media/shrine_x2.gif" alt="The Drowned Shrine: the full battle loop" width="100%"></a></td>
 </tr>
 <tr>
-<td valign="top"><b>Pixel Art Studio trailer</b><br>95 s at 480 &times; 270: seven characters, five stages and a UI kit, all built as plugin documents by agents, and a level that shows scene lights in three render pipelines.<br><a href="https://hardcorebudget.github.io/Pixel-Art-Pipeline/pixel-art-studio/">Breakdown</a> &middot; <a href="https://youtu.be/kO9-EMmBzIY">Watch in 4K on YouTube</a></td>
+<td valign="top"><b>Pixel Art Studio trailer</b><br>104 s at 480 &times; 270: nine characters, six stages and a UI kit, all built as plugin documents by agents, a five-zone hub that unlocks level by level, and a haunted level that shows scene lights in three render pipelines.<br><a href="https://hardcorebudget.github.io/Pixel-Art-Pipeline/pixel-art-studio/">Breakdown</a> &middot; <a href="https://youtu.be/WxdEQH4bKfU">Watch in 4K on YouTube</a></td>
 <td valign="top"><b>Ashen Peak</b><br>An arcade fight: two fighters, 28 moves, 137 frames, every frame at 0 pinholes.<br><a href="https://hardcorebudget.github.io/Pixel-Art-Pipeline/ashen-peak/">Page</a> &middot; <a href="scenes/ashen_peak">source</a></td>
 <td valign="top"><b>The Drowned Shrine</b><br>A turn-based battle: tiles, lighting, effects, UI and two fighters, a 336-tick loop.<br><a href="https://hardcorebudget.github.io/Pixel-Art-Pipeline/drowned-shrine/">Page</a> &middot; <a href="scenes/drowned_shrine">source</a></td>
 </tr>
 </table>
 
 Both scenes rebuild from [`scenes/`](scenes/README.md) with no GPU, identical frame for frame. There is also a
-[behind-the-scenes video](https://youtu.be/6D3o98zsSJg) of the plugin at work.
+[behind-the-scenes video](https://youtu.be/r_fc4_3jlh4) of the plugin at work.
 
 ## Pixel Art Studio for Unity
 
