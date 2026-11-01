@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Office Chase</title>
+<meta name="description" content="A chaotic top-down corporate chase scene built with Pixel Art Studio: destructible furniture, ambient loops, and character pathing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --ground: #0e131f; --deep: #161d2e; --panel: #1f293d; --rule: #2e3d57;
+  --ink: #e6eef8; --muted: #8fa2bd; --gold: #ffd166; --ember: #ef476f; --mint: #06d6a0; --cyan: #118ab2;
+  --display: "Bungee", "JetBrains Mono", ui-monospace, monospace;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+* { box-sizing: border-box; }
+body { background: var(--ground); color: var(--ink); font: 400 16px/1.6 var(--body); margin: 0; }
+main { max-width: 1080px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 64px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.4rem, 7vw, 4.2rem); line-height: 0.95; color: var(--gold); text-shadow: 3px 3px 0 #ef476f; }
+h2 { font-size: 1.7rem; line-height: 1.1; color: var(--ink); }
+h3 { font-size: 1.3rem; line-height: 1; }
+p { margin: 0; max-width: 68ch; }
+.muted { color: var(--muted); }
+.eyebrow { font: 600 0.72rem/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--mint); }
+.stack { display: grid; gap: 14px; }
+img.px { image-rendering: pixelated; image-rendering: crisp-edges; display: block; max-width: 100%; height: auto; }
+.screen { background: #000; border: 3px solid var(--ink); box-shadow: 0 0 0 5px var(--ground), 0 0 0 8px var(--cyan); max-width: 1024px; border-radius: 4px; overflow: hidden; }
+.screen video { display: block; width: 100%; height: auto; }
+.caption { font: 400 0.82rem/1.5 var(--mono); color: var(--muted); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 20px; font: 400 0.82rem/1.4 var(--mono); color: var(--muted); }
+.facts b { color: var(--gold); font-weight: 600; font-variant-numeric: tabular-nums; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 16px; }
+.card { background: var(--deep); border: 1px solid var(--rule); padding: 14px; border-radius: 6px; display: grid; gap: 8px; }
+.card img { width: 100%; border-radius: 2px; }
+.card b { font-family: var(--display); font-size: 0.95rem; color: var(--gold); }
+.card span { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 20px; align-items: start; }
+.two figure { margin: 0; display: grid; gap: 8px; }
+footer { font: 400 0.78rem/1.6 var(--mono); color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; }
+footer a { color: var(--gold); }
+</style>
+<link rel="stylesheet" href="../assets/site-tabs.css">
+</head>
+<body>
+<a class="site-skip" href="#content">Skip to content</a>
+<nav class="site-tabs" aria-label="Site">
+  <ul>
+    <li><a href="../index.html">Pipeline</a></li>
+    <li><a href="../pixel-art-studio/index.html">Pixel Art Studio</a></li>
+    <li><a href="../office-chase/index.html" aria-current="page">Office Chase</a></li>
+    <li><a href="../ashen-peak/index.html">Ashen Peak</a></li>
+    <li><a href="../drowned-shrine/index.html">Drowned Shrine</a></li>
+  </ul>
+</nav>
+
+<main id="content">
+  <header class="stack">
+    <span class="eyebrow">Pixel Art Studio · Top-Down Action Demo · 60 FPS</span>
+    <h1>Office Chase</h1>
+    <p>A fast-paced top-down corporate pursuit through a furnished cubicle floor: fleeing guards, toppled desks,
+      spilled water coolers, and smashed equipment. Every piece of furniture, destruction state, ambient loop, and
+      character sprite was authored and rigged inside Pixel Art Studio.</p>
+    <div class="facts">
+      <span><b>66.0 s</b> duration</span>
+      <span><b>3,958</b> frames at 60 fps</span>
+      <span><b>6</b> destructible prop states</span>
+      <span><b>4</b> ambient loop sets</span>
+      <span><b>100%</b> native pixel art</span>
+    </div>
+  </header>
+
+  <section class="stack">
+    <div class="screen">
+      <video controls preload="metadata" playsinline poster="media/poster.png">
+        <source src="OfficeChase-v4-960x540.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="caption">The complete 66-second chase sequence in full 60 fps action.</p>
+  </section>
+
+  <section class="stack">
+    <h2>Environment & Destruction Aftermath</h2>
+    <div class="two">
+      <figure>
+        <img class="px" src="media/overview.png" alt="Office Stage Overview">
+        <figcaption class="caption">The pristine top-down office layout before the breach: cubicles, water station, and conference room.</figcaption>
+      </figure>
+      <figure>
+        <img class="px" src="media/aftermath.png" alt="Office Chase Aftermath">
+        <figcaption class="caption">The aftermath: kicked-down doors, overturned whiteboards, leaking cooler puddles, and broken monitors.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Destructible Prop Stages</h2>
+    <p class="muted">Interactive scene objects authored with multiple damage phases, particle fragments, and ground decal states:</p>
+    <div class="gallery">
+      <div class="card">
+        <img class="px" src="media/break-door-x3.gif" alt="Breaching Door">
+        <b>Breach Door</b>
+        <span>Door kicks open with wood splinter decals and frame strain.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/break-cooler-puddles-x3.gif" alt="Water Cooler Rupture">
+        <b>Water Cooler</b>
+        <span>Bottle ruptures on impact with spreading floor puddle decals.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/break-whiteboard-x3.gif" alt="Toppled Whiteboard">
+        <b>Whiteboard</b>
+        <span>Spun and knocked flat, scattering markers and paper.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/break-monitor-x3.gif" alt="Smashed Screen">
+        <b>CRT / Monitor</b>
+        <span>Screen cracks with electric sparks and shattered glass fragments.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/break-plantpot-x3.gif" alt="Shattered Plant Pot">
+        <b>Ceramic Planter</b>
+        <span>Clay pot shatters into shards, scattering potting soil.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/break-ac-x3.gif" alt="AC Unit Failure">
+        <b>Air Conditioner</b>
+        <span>Grille rips free with venting steam puffs and loose wiring.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <h2>Ambient Office Loops</h2>
+    <p class="muted">Subtle background animations that give the office space life before the chase begins:</p>
+    <div class="gallery">
+      <div class="card">
+        <img class="px" src="media/loop-mug-steam-x3.gif" alt="Coffee Steam">
+        <b>Coffee Mug</b>
+        <span>Steaming warm mug sitting beside desk work.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/loop-clock-x3.gif" alt="Ticking Clock">
+        <b>Wall Clock</b>
+        <span>Sweeping second hand keeping precise office hours.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/loop-monitor-x3.gif" alt="Active Workstation">
+        <b>Workstation Terminal</b>
+        <span>Blinking cursor and scrolling code diagnostics.</span>
+      </div>
+      <div class="card">
+        <img class="px" src="media/loop-ac-x3.gif" alt="AC Ventilation">
+        <b>Overhead Vent</b>
+        <span>Subtle vibration and swaying marker ribbon.</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Part of the <a href="../index.html">Pixel-Art-Pipeline</a> showcase. Created with <a href="../pixel-art-studio/index.html">Pixel Art Studio for Unity</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

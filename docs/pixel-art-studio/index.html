@@ -278,6 +278,7 @@ footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--lin
   <ul>
     <li><a href="../index.html">Pipeline</a></li>
     <li><a href="../pixel-art-studio/index.html" aria-current="page">Pixel Art Studio</a></li>
+    <li><a href="../office-chase/index.html">Office Chase</a></li>
     <li><a href="../ashen-peak/index.html">Ashen Peak</a></li>
     <li><a href="../drowned-shrine/index.html">Drowned Shrine</a></li>
   </ul>
@@ -286,12 +287,13 @@ footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--lin
 <header class="mast">
   <p class="eyebrow">Pixel Art Studio for Unity &middot; trailer breakdown</p>
   <h1>Pixel Art Studio <span>Trailer</span></h1>
-  <p class="lede">Two trailers. The 2.0 trailer comes first: 119 seconds, six new levels on a World 2 map. The 1.x trailer below it is 104 seconds at 480 &times; 270. Nine characters, six stages and a UI kit were built as <code>.pas</code> documents by agents working through the plugin's own verbs, then scripted beat by beat, recorded in Unity and checked pixel for pixel. The map is a five-zone hub that unlocks level by level, with a preview of each level, and the fifth level, a haunted archive, shows scene lights in three render pipelines.</p>
+  <p class="lede">Three trailers. The 3.0 trailer comes first: 130.8 seconds introducing HD-2D, overworld route navigation, dynamic lighting across day and night, and the multi-phase Bell-Warden boss fight with live mid-battle weapon swaps. The 2.0 trailer: 119 seconds, six new levels on a World 2 map. The 1.x trailer is 104 seconds at 480 &times; 270. Nine characters, six stages and a UI kit were built as <code>.pas</code> documents by agents working through the plugin's own verbs, then scripted beat by beat, recorded in Unity and checked pixel for pixel.</p>
 </header>
 </div>
 
 <nav class="nav" aria-label="Sections">
   <ol>
+    <li><a href="#trailer-3">Trailer 3.0</a></li>
     <li><a href="#trailer-2">Trailer 2.0</a></li>
     <li><a href="#trailer">Trailer 1.x</a></li>
     <li><a href="#script">Script</a></li>
@@ -305,7 +307,46 @@ footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--lin
   </ol>
 </nav>
 
-<div class="wrap" style="margin-top:40px">
+<section id="trailer-3" aria-labelledby="h-trailer-3">
+  <div class="sec-head">
+    <h2 id="h-trailer-3" class="levelcard">Trailer 3.0</h2>
+    <p>The 3.0 trailer: 130.8 seconds (7,848 frames at 60 fps) introducing HD-2D. Overworld route navigation, dynamic 24-hour lighting across dawn, midday, sunset dusk, and night, and the multi-phase Bell-Warden street battle with live mid-fight weapon swaps.</p>
+  </div>
+  <div class="screen">
+    <iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/aBeEblpDx5o" title="Pixel Art Studio 3.0 Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0;display:block;"></iframe>
+  </div>
+  <div class="screen-meta mono"><span>130.8 s &middot; 7,848 frames at 60 fps &middot; 1920 &times; 1080 native HD-2D</span><span>Watch in 4K on YouTube</span></div>
+  <p class="watch"><a href="https://youtu.be/aBeEblpDx5o">Watch in 4K on YouTube</a></p>
+  <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>Scene</th><th>What it shows</th><th>Environment</th><th>Cast</th><th>At</th></tr></thead>
+      <tbody>
+        <tr><td class="num">3-1</td><td>Overworld Map: elevation contours, landmark pins, and camera pathing</td><td>Overworld</td><td>Camera</td><td class="num"><button type="button" class="chipbtn" data-t3="3.4">0:03</button></td></tr>
+        <tr><td class="num">3-2</td><td>The Village: cobblestones, animated well, dynamic shadows, and 24h lighting transition</td><td>Town Square</td><td>Villagers</td><td class="num"><button type="button" class="chipbtn" data-t3="20.4">0:20</button></td></tr>
+        <tr><td class="num">3-3</td><td>The Wake: Belfry dust, bell resonance, and awakening of the Bell-Warden</td><td>Belfry Tower</td><td>Wren, Bell-Warden</td><td class="num"><button type="button" class="chipbtn" data-t3="55.0">0:55</button></td></tr>
+        <tr><td class="num">3-4</td><td>The Street Fight: hammer ground slam, shockwave ring, mid-fight gear swapping, and sunset dusk lighting</td><td>Village Street</td><td>Wren, Bell-Warden</td><td class="num"><button type="button" class="chipbtn" data-t3="71.0">1:11</button></td></tr>
+        <tr><td class="num">3-5</td><td>Night Battle & Victory: street lamps ignite, bloom and depth-of-field bokeh, hammer knock-away, and victory pose</td><td>Street & Bridge</td><td>Wren</td><td class="num"><button type="button" class="chipbtn" data-t3="93.8">1:33</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="bts" id="bts-3">
+    <h3 class="subhead">Behind the scenes: 3.0</h3>
+    <p>A tour behind the 3.0 HD-2D pipeline: 3D model baking from Blender, normal map generation, camera depth bias, real-time lighting and shadows, and the custom character rig.</p>
+    <div class="screen" style="width:auto;max-width:960px">
+      <iframe width="960" height="540" src="https://www.youtube-nocookie.com/embed/tiVeYGVkB3s" title="Pixel Art Studio 3.0 Behind The Scenes" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="width:100%;aspect-ratio:16/9;border:0;display:block;"></iframe>
+    </div>
+    <p class="watch"><a href="https://youtu.be/tiVeYGVkB3s">Watch on YouTube</a></p>
+  </div>
+  <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>Video on YouTube</th><th>Format</th><th>Chapters</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://youtu.be/aBeEblpDx5o"><code>Trailer 3.0 (YouTube 4K)</code></a></td><td>3840 &times; 2160 H.264, 60 fps</td><td class="num">7 chapters</td></tr>
+        <tr><td><a href="https://youtu.be/tiVeYGVkB3s"><code>Behind the Scenes 3.0</code></a></td><td>1920 &times; 1080 H.264, 60 fps</td><td class="num">6 chapters</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
 <section id="trailer-2" aria-labelledby="h-trailer-2">
   <div class="sec-head">
@@ -1525,6 +1566,8 @@ footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--lin
   }
   bind("data-t2", "trailer2-video");
   bind("data-bts2", "bts2-video");
+  bind("data-t3", "trailer3-video");
+  bind("data-bts3", "bts3-video");
 })();
 </script>
 </body>
